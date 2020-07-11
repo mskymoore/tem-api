@@ -153,13 +153,13 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'US/Eastern'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_BEAT_SCHEDULE = {
-    'update-database': {
-        'task': 'temapi.tasks.do_data_update',
-        'schedule': td(hours=6),
-        # 'args': (*args)
-    }
-}
+# CELERY_BEAT_SCHEDULE = {
+#     'update-database': {
+#         'task': 'temapi.tasks.do_data_update',
+#         'schedule': td(hours=6),
+#         # 'args': (*args)
+#     }
+# }
 
 
 
