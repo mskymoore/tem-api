@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import EntryDateListView, EntryDateDetailView
+from .views import EntryDateListView, EntryDateDetailView, EntryDateYearView
 
 urlpatterns = [
-   path('ed/<pk>', EntryDateListView.as_view()),
-   path('edd/<pk>', EntryDateDetailView.as_view())
+   path('ed', EntryDateListView.as_view()),
+   path('ed/<pk>', EntryDateDetailView.as_view()),
+   path('ed/yr/<year>', EntryDateYearView.as_view())
 ]
