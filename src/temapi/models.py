@@ -56,7 +56,7 @@ class Rate(models.Model):
     region = models.ForeignKey(Region, related_name='rates', on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"{self.cur_token}{self.cur_per_hr} for a {self.discipline} {self.position} for {self.client} in {self.region}"
+        return f"{self.cur_token}{self.cur_per_hr}/hr for a {self.discipline} {self.position} for {self.client} in {self.region}"
 
 class DayRate(models.Model):
     name = models.CharField(max_length=256, null=True)
@@ -64,7 +64,7 @@ class DayRate(models.Model):
     cur_per_day = models.FloatField(null=False, default=0)
 
     def __str__(self):
-        return f"{cur_token}{cur_per_day}/day"
+        return f"{self.cur_token}{self.cur_per_day}/day"
 
 class Equipment(models.Model):
     name = models.CharField(max_length=256, null=True)
