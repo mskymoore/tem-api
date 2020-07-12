@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-
 class EntryDate(models.Model):
     date = models.DateField()
 
@@ -21,7 +20,7 @@ class Employee(models.Model):
     position = models.ForeignKey(Position, related_name='employees', on_delete=models.DO_NOTHING)
     discipline = models.ForeignKey(Discipline, related_name='employees', on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=256, null=False, default="employee", unique=False)
-    email = models.CharField(max_length=256, null=False, default="employee@example.com", unique=True)
+    email = models.EmailField(max_length=256, null=False, default="employee@example.com", unique=True)
     def __str__(self):
         return f"{self.name}, {self.email}, {self.number}, {self.position}, {self.discipline}"
 

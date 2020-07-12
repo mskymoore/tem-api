@@ -42,6 +42,7 @@ services:
     depends_on:
       - db
       - redis
+    restart: always
   
   celery:
     image: tem-api:latest
