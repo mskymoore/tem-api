@@ -92,6 +92,7 @@ class ManHoursCharge(models.Model):
     site = models.ForeignKey(Site, related_name='man_hours_charges', on_delete=models.DO_NOTHING)
     hours = models.PositiveIntegerField(null=False, default=0)
     employee = models.ForeignKey(Employee, related_name='charges', on_delete=models.DO_NOTHING)
+    position = models.ForeignKey(Position, related_name='charges', on_delete=models.DO_NOTHING)
     date = models.DateField()
 
     def __str__(self):

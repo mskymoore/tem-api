@@ -38,6 +38,7 @@ services:
       - apinetwork
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./yinyang.ico:/etc/nginx/html/favicon.ico
       # - /etc/letsencrypt:/etc/letsencrypt
       - "./src/static:/etc/nginx/static"
 
