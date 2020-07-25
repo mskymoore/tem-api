@@ -57,7 +57,6 @@ class Rate(models.Model):
     cur_per_hr = models.FloatField(null=False, default=0)
     ot_cur_per_hr = models.FloatField(null=False, default=0)
     position = models.ForeignKey(Position, related_name='rates', on_delete=models.DO_NOTHING)
-    region = models.ForeignKey(Region, related_name='rates', on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return f"{self.cur_token}{self.cur_per_hr}/hr for a {self.discipline} {self.position} for {self.client} in {self.region}"
@@ -99,10 +98,9 @@ class Worklog(model.Model):
     summary = models.CharField(max_length=32000, null=False)
     client = models.ForeignKey(Client, related_name='worklogs', on_delete=models.DO_NOTHING)
     site = models.ForeignKey(Site, related_name='worklogs', on_delete=models.DO_NOTHING)
-    region = models.ForeignKey(Region, related_name='worklogs', on_delete=models.DO_NOTHING)
     approved = models.BooleanField(null=False, default=False)
     disputed = models.BooleanField(null=False, default=False)
-    date = models.DateField()
+    date = models.DateField(auto_now=True)
 
     def __str__(self):
         return f"{self.date} - {self.client}, {self.site}, {self.region}"
@@ -114,7 +112,7 @@ class EquipmentCharge(models.Model):
     equipment = models.ForeignKey(Equipment, related_name='charges', on_delete=models.DO_NOTHING)
     site = models.ForeignKey(Site, related_name='equipment_charges', on_delete=models.DO_NOTHING)
     worklog = models.ForeignKey(Worklog, related_name='equipment_charges', on_delete=models.DO_NOTHING)
-    date = models.DateField()
+    date = models.DateField(auto_now=True)
 
     def __str__(self):
         return f"{self.hours}hrs of {self.equipment} at {self.site} for {self.client}"
@@ -127,7 +125,7 @@ class ManHoursCharge(models.Model):
     employee = models.ForeignKey(Employee, related_name='charges', on_delete=models.DO_NOTHING)
     position = models.ForeignKey(Position, related_name='charges', on_delete=models.DO_NOTHING)
     worklog = models.ForeignKey(Worklog, related_name='manhours_charges')
-    date = models.DateField()
+    date = models.DateField(auto_now=True)
 
     def __str__(self):
         return f"{self.hours}hrs worked by {self.employee} at {self.site} for {self.client}"

@@ -67,7 +67,6 @@ class RateSerializer(serializers.ModelSerializer):
             'cur_per_hr',
             'ot_cur_per_hr',
             'position',
-            'region',
         )
 
 
@@ -110,7 +109,6 @@ class WorklogSerializer(serializers.ModelSerializer):
             'summary',
             'client',
             'site',
-            'region',
             'approved',
             'disputed',
             'date',
