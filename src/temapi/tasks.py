@@ -52,10 +52,16 @@ disciplines = [
    electrical
 ]
 
-positions = {
-   electrician: disciplines[1],
-   welder: disciplines[0]
-}
+positions = [
+   {
+      name: electrician,
+      discipline: disciplines[1]
+   },
+   {
+      name: welder,
+      discipline: disciplines[0]
+   }
+]
 
 clients = [
    clientA,
@@ -211,16 +217,18 @@ def load_example_data(sender=None, conf=None, **kwargs):
       Discipline(name=disc).save()
    
    for pos in positions:
+      print(f"adding position {pos}")
       Position(
-         name=pos,
-         discipline=Discipline.objects.filter(name=positions[pos]).first()
+         name=pos[name],
+         discipline=Discipline.objects.filter(name=pos[discipline]).first()
       ).save()
 
-   for client in clients:
-      print(f"adding client {client}")
-      Client(name=client).save()
+   for c in clients:
+      print(f"adding client {c}")
+      Client(name=c).save()
 
    for reg in regions:
+      print(f"adding region {reg}")
       rg = Region(
          name=reg
       )
@@ -229,17 +237,18 @@ def load_example_data(sender=None, conf=None, **kwargs):
          rg.clients.add(c)
       # rg.save()
    
-   for i, site in enumerate(sites):
+   for i, s in enumerate(sites):
+      print(f"adding site {site}")
       st = Site(
-         name=site[name],
-         lat=site[lat],
-         lon=site[lon],
-         region=Region.objects.filter(name=site[region]).first()
+         name=s[name],
+         lat=s[lat],
+         lon=s[lon],
+         region=Region.objects.filter(name=s[region]).first()
       )
       st.save()
       
-      for client in site[clients]:
-         st.clients.add(Client.objects.filter(name=client).first())
+      for c in s[clients_]:
+         st.clients.add(Client.objects.filter(name=c).first())
 
    for eqp in equipment:
       Equipment(
@@ -289,11 +298,11 @@ def load_example_data(sender=None, conf=None, **kwargs):
 
    
    wl = Worklog(
-      summary= wl[summary],
-      client= Client.objects.filter(name=wl[client]).first(),
-      site = Site.objects.filter(name=wl[site]).first(),
-      approved = wl[approved],
-      disputed = wl[disputed]
+      summary= worklogs[0][summary],
+      client= Client.objects.filter(name=worklogs[0][client]).first(),
+      site = Site.objects.filter(name=worklogs[0][site][name]).first(),
+      approved = worklogs[0][approved],
+      disputed = worklogs[0][disputed]
    )
    wl.save()
    
@@ -302,7 +311,7 @@ def load_example_data(sender=None, conf=None, **kwargs):
       mc = ManHoursCharge(
          hours = m[hours],
          employee = Employee.objects.filter(name=m[employee][name]).first(),
-         positoin = Position.objects.filter(name=m[position]).first(),
+         position = Position.objects.filter(name=m[position][name]).first(),
          worklog = wl
       )
       mc.save()
