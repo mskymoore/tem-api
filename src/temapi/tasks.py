@@ -3,13 +3,15 @@ from celery.signals import worker_ready
 from .models import EntryDate, Discipline, Position
 from .models import Employee, Client, Region, Site, DayRate
 from .models import Rate, Equipment, EquipmentCharge, ManHoursCharge
+from .models import RateSheet, Worklog
 
 
 
 mechanical = "mechanical"
 electrical = "electrical"
-electrician = "electrician"
+electrician = "electrician" 
 welder = "welder"
+client = "client"
 clientA = "clientA"
 clientB = "clientB"
 westtx = "west-texas-1"
@@ -39,6 +41,10 @@ approved = "approved"
 disputed = "disputed"
 email = "email"
 region = "region"
+rates_ = "rates"
+hours = "hours"
+employee = "employee"
+worklog = "worklog"
 
 
 disciplines = [
@@ -68,13 +74,15 @@ sites = [
       name: site1,
       lat: -45.643,
       lon: 44.322,
-      clients_: clients
+      clients_: clients,
+      region: regions[0]
    },
    {
       name: site2,
       lat: -47.903,
       lon: 74.523,
-      clients_: clients
+      clients_: clients,
+      region: regions[1]
    }
 ]
 
@@ -133,7 +141,7 @@ rates = [
 
 employees = [
    {
-      'number': 1,
+      number: 1,
       position: electrician,
       discipline: disciplines[1],
       name: 'test employee',
@@ -148,7 +156,7 @@ ratesheets = [
       client: clients[0],
       region: regions[0],
       day_rates: dayrates,
-      rates: rates
+      rates_: rates
    },
 ]
 
@@ -162,10 +170,32 @@ worklogs = [
    },
 ]
 
+manhourscharges = [
+   {
+      hours: 8,
+      employee: employees[0],
+      position: positions[0],
+      worklog: worklogs[0]  
+   },
+   {
+      hours: 4,
+      employee: employees[0],
+      position: positions[1],
+      worklog: worklogs[0]  
+   },
+]
+
 equipmentcharges = [
    {
-      client
-   }
+      hours: 4,
+      equipment_: equipment[0],
+      worklog: worklogs[0]
+   },
+   {
+      hours: 4,
+      equipment_: equipment[1],
+      worklog: worklogs[0]
+   },
 ]
 
 @shared_task
@@ -199,21 +229,30 @@ def load_example_data(sender=None, conf=None, **kwargs):
          rg.clients.add(c)
       # rg.save()
    
-   for site in sites:
+   for i, site in enumerate(sites):
       st = Site(
          name=site[name],
          lat=site[lat],
          lon=site[lon],
-         region=Region.objects.filter(name=westtx).first()
+         region=Region.objects.filter(name=site[region]).first()
       )
       st.save()
-      st.clients.add(Client.objects.filter(name=clientA).first())
+      
+      for client in site[clients]:
+         st.clients.add(Client.objects.filter(name=client).first())
+
+   for eqp in equipment:
+      Equipment(
+         name=eqp[name],
+         number=eqp[number],
+      ).save()
 
    for dr in dayrates:
       DayRate(
          name=dr[name],
          cur_token=dr[cur_token],
-         cur_per_day=dr[cur_per_day]
+         cur_per_day=dr[cur_per_day],
+         equipment=Equipment.objects.filter(number=dr[equipment_][number]).first()
       ).save()
 
    for r in rates:
@@ -222,10 +261,7 @@ def load_example_data(sender=None, conf=None, **kwargs):
          cur_token=r[cur_token],
          cur_per_hr=r[cur_per_hr],
          ot_cur_per_hr=r[ot_cur_per_hr],
-         client=Client.objects.filter(name=r[client]).first(),
          position=Position.objects.filter(name=r[position]).first(),
-         discipline=Discipline.objects.filter(name=r[discipline]).first(),
-         region=Region.objects.filter(name=r[region]).first()
       ).save()
       
    for e in employees:
@@ -237,9 +273,46 @@ def load_example_data(sender=None, conf=None, **kwargs):
          discipline=Discipline.objects.filter(name=e[discipline]).first()
       ).save()
 
-   for eqp in equipment:
-      Equipment(
-         name=eqp[name],
-         number=eqp[number],
-         dayrate=DayRate.objects.filter(name=eqp[dayrate]).first()
-      ).save()
+   for r in ratesheets:
+      rs = RateSheet(
+         name = r[name],
+         client = Client.objects.filter(name=r[client]).first(),
+         region = Region.objects.filter(name=r[region]).first(),
+      )
+      rs.save()
+
+      for rate in r[rates_]:
+         rs.rates.add(Rate.objects.filter(name=rate[name]).first())
+
+      for drate in r[day_rates]:
+         rs.day_rates.add(DayRate.objects.filter(name=drate[name]).first())
+
+   
+   wl = Worklog(
+      summary= wl[summary],
+      client= Client.objects.filter(name=wl[client]).first(),
+      site = Site.objects.filter(name=wl[site]).first(),
+      approved = wl[approved],
+      disputed = wl[disputed]
+   )
+   wl.save()
+   
+
+   for m in manhourscharges:
+      mc = ManHoursCharge(
+         hours = m[hours],
+         employee = Employee.objects.filter(name=m[employee][name]).first(),
+         positoin = Position.objects.filter(name=m[position]).first(),
+         worklog = wl
+      )
+      mc.save()
+
+   for e in equipmentcharges:
+      ec = EquipmentCharge(
+         hours = e[hours],
+         equipment=Equipment.objects.filter(name=e[equipment_][name]).first(),
+         worklog = wl
+      )
+      ec.save()
+
+   
