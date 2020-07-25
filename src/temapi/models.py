@@ -59,7 +59,7 @@ class Rate(models.Model):
     position = models.ForeignKey(Position, related_name='rates', on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"{self.cur_token}{self.cur_per_hr}/hr for a {self.discipline} {self.position} for {self.client} in {self.region}"
+        return f"{self.cur_token}{self.cur_per_hr}/hr for a {self.position}"
 
 
 class Equipment(models.Model):
@@ -103,7 +103,7 @@ class Worklog(models.Model):
     date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"{self.date} - {self.client}, {self.site}, {self.region}"
+        return f"{self.date} - {self.client}, {self.site}"
 
 
 class EquipmentCharge(models.Model):
@@ -113,7 +113,7 @@ class EquipmentCharge(models.Model):
     date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"{self.hours}hrs of {self.equipment} at {self.site} for {self.client}"
+        return f"{self.hours}hrs of {self.equipment}"
 
 
 class ManHoursCharge(models.Model):
@@ -124,7 +124,7 @@ class ManHoursCharge(models.Model):
     date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"{self.hours}hrs worked by {self.employee} at {self.site} for {self.client}"
+        return f"{self.hours}hrs worked by {self.employee}"
 
 
 class Dispute(models.Model):
