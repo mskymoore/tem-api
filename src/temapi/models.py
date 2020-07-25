@@ -56,7 +56,6 @@ class Rate(models.Model):
     cur_token = models.CharField(max_length=1, null=False, default="$")
     cur_per_hr = models.FloatField(null=False, default=0)
     ot_cur_per_hr = models.FloatField(null=False, default=0)
-    client = models.ForeignKey(Client, related_name='rates', on_delete=models.DO_NOTHING)
     position = models.ForeignKey(Position, related_name='rates', on_delete=models.DO_NOTHING)
     region = models.ForeignKey(Region, related_name='rates', on_delete=models.DO_NOTHING)
 
@@ -95,7 +94,6 @@ class RateSheet(models.Model):
     def __str__(self):
         return f"{self.name} for {self.client} in {self.region} region"
     
-
 
 class Worklog(model.Model):
     summary = models.CharField(max_length=32000, null=False)
