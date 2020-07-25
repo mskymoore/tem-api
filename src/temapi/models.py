@@ -86,7 +86,7 @@ class DayRate(models.Model):
 class RateSheet(models.Model):
     name = models.CharField(max_length=256, null=False)
     client = models.ForeignKey(Client, related_name='rate_sheets', on_delete=models.DO_NOTHING)
-    region = models.ForeignKey(Region, related_name='rate_sheets', on_delet=models.DO_NOTHING)
+    region = models.ForeignKey(Region, related_name='rate_sheets', on_delete=models.DO_NOTHING)
     day_rates = models.ManyToManyField(DayRate)
     rates = models.ManyToManyField(Rate)
 
@@ -94,7 +94,7 @@ class RateSheet(models.Model):
         return f"{self.name} for {self.client} in {self.region} region"
     
 
-class Worklog(model.Model):
+class Worklog(models.Model):
     summary = models.CharField(max_length=32000, null=False)
     client = models.ForeignKey(Client, related_name='worklogs', on_delete=models.DO_NOTHING)
     site = models.ForeignKey(Site, related_name='worklogs', on_delete=models.DO_NOTHING)
@@ -120,7 +120,7 @@ class ManHoursCharge(models.Model):
     hours = models.PositiveIntegerField(null=False, default=0)
     employee = models.ForeignKey(Employee, related_name='charges', on_delete=models.DO_NOTHING)
     position = models.ForeignKey(Position, related_name='charges', on_delete=models.DO_NOTHING)
-    worklog = models.ForeignKey(Worklog, related_name='manhours_charges')
+    worklog = models.ForeignKey(Worklog, related_name='manhours_charges', on_delete=models.DO_NOTHING)
     date = models.DateField(auto_now=True)
 
     def __str__(self):
