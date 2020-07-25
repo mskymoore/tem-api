@@ -107,10 +107,8 @@ class Worklog(model.Model):
 
 
 class EquipmentCharge(models.Model):
-    client = models.ForeignKey(Client, related_name='equipment_charges', on_delete=models.DO_NOTHING) 
     hours = models.PositiveIntegerField(null=False, default=0)
     equipment = models.ForeignKey(Equipment, related_name='charges', on_delete=models.DO_NOTHING)
-    site = models.ForeignKey(Site, related_name='equipment_charges', on_delete=models.DO_NOTHING)
     worklog = models.ForeignKey(Worklog, related_name='equipment_charges', on_delete=models.DO_NOTHING)
     date = models.DateField(auto_now=True)
 
@@ -119,8 +117,6 @@ class EquipmentCharge(models.Model):
 
 
 class ManHoursCharge(models.Model):
-    client = models.ForeignKey(Client, related_name='manhours_charges', on_delete=models.DO_NOTHING)
-    site = models.ForeignKey(Site, related_name='manhours_charges', on_delete=models.DO_NOTHING)
     hours = models.PositiveIntegerField(null=False, default=0)
     employee = models.ForeignKey(Employee, related_name='charges', on_delete=models.DO_NOTHING)
     position = models.ForeignKey(Position, related_name='charges', on_delete=models.DO_NOTHING)

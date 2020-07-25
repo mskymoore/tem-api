@@ -119,10 +119,8 @@ class EquipmentChargeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EquipmentCharge
         fields = (
-            'client',
             'hours',
             'equipment',
-            'site',
             'worklog',
             'date',
         )
@@ -132,8 +130,6 @@ class ManHoursChargeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ManHoursCharge
         fields = (
-            'client',
-            'site',
             'hours',
             'employee',
             'position',
