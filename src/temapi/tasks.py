@@ -3,7 +3,7 @@ from celery.signals import worker_ready
 from .models import EntryDate, Discipline, Position
 from .models import Employee, Client, Region, Site, DayRate
 from .models import Rate, Equipment, EquipmentCharge, ManHoursCharge
-from .models import RateSheet, Worklog
+from .models import RateSheet, Worklog, Dispute
 
 
 
@@ -45,6 +45,7 @@ rates_ = "rates"
 hours = "hours"
 employee = "employee"
 worklog = "worklog"
+notes = "notes"
 
 
 disciplines = [
@@ -204,6 +205,16 @@ equipmentcharges = [
    },
 ]
 
+
+disputes = [
+   {
+      worklog: worklogs[0],
+      summary: 'wrong hours at site a',
+      notes: 'test employee charged one too many hours',
+      employee: employees[0]
+   }
+]
+
 @shared_task
 def do_data_update():
    pass 
@@ -323,5 +334,16 @@ def load_example_data(sender=None, conf=None, **kwargs):
          worklog = wl
       )
       ec.save()
+
+   
+   for d in disputes:
+      ds = Dispute(
+         worklog = wl,
+         summary = d[summary],
+         notes= d[notes]
+      )
+      ds.save()
+
+      ds.manhours_charges.add(ManHoursCharge.objects.filter(employee__name=d[employee][name], hours=8).first())
 
    

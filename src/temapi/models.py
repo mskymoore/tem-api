@@ -12,7 +12,7 @@ class Discipline(models.Model):
 
 
 class Position(models.Model):
-    name = models.CharField(max_length=256, null=False, default="position", unique=True)
+    name = models.CharField(max_length=256, null=False, default="", unique=True)
     discipline = models.ForeignKey(Discipline, related_name='discipline', on_delete=models.DO_NOTHING)
     def __str__(self):
         return f"{self.name}"
@@ -106,10 +106,21 @@ class Worklog(models.Model):
         return f"{self.date} - {self.client}, {self.site}"
 
 
+class Dispute(models.Model):
+    worklog = models.ForeignKey(Worklog, related_name='disputes', on_delete=models.DO_NOTHING)
+    summary = models.CharField(max_length=1008, null=False)
+    notes = models.CharField(max_length=32000, null=True)
+    resolved = models.BooleanField(null=False, default=False)
+
+    def __str__(self):
+        return f"{self.summary} - {self.worklog}"
+
+
 class EquipmentCharge(models.Model):
-    hours = models.PositiveIntegerField(null=False, default=0)
+    hours = models.FloatField(null=False, default=0)
     equipment = models.ForeignKey(Equipment, related_name='charges', on_delete=models.DO_NOTHING)
     worklog = models.ForeignKey(Worklog, related_name='equipment_charges', on_delete=models.DO_NOTHING)
+    dispute = models.ForeignKey(Dispute, related_name='equipment_charges', on_delete=models.DO_NOTHING, null=True)
     date = models.DateField(auto_now=True)
 
     def __str__(self):
@@ -117,21 +128,12 @@ class EquipmentCharge(models.Model):
 
 
 class ManHoursCharge(models.Model):
-    hours = models.PositiveIntegerField(null=False, default=0)
+    hours = models.FloatField(null=False, default=0)
     employee = models.ForeignKey(Employee, related_name='charges', on_delete=models.DO_NOTHING)
     position = models.ForeignKey(Position, related_name='charges', on_delete=models.DO_NOTHING)
     worklog = models.ForeignKey(Worklog, related_name='manhours_charges', on_delete=models.DO_NOTHING)
+    dispute = models.ForeignKey(Dispute, related_name='manhours_charges', on_delete=models.DO_NOTHING, null=True)
     date = models.DateField(auto_now=True)
 
     def __str__(self):
         return f"{self.hours}hrs worked by {self.employee}"
-
-
-class Dispute(models.Model):
-    worklog = models.ForeignKey(Worklog, related_name='disputes', on_delete=models.DO_NOTHING)
-    summary = models.CharField(max_length=1008, null=False)
-    notes = models.CharField(max_length=32000, null=True)
-    equipment_charges = models.ManyToManyField(EquipmentCharge)
-    manhours_charges = models.ManyToManyField(ManHoursCharge)
-
-
