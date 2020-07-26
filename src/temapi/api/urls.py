@@ -20,7 +20,7 @@ router.register(r'eqp', EquipmentViewSet)
 router.register(r'drt', DayRateViewSet)
 router.register(r'rsh', RateSheetViewSet)
 router.register(r'wrk', WorklogViewSet)
-router.register(r'dis', DisputeViewSet)
+router.register(r'disp', DisputeViewSet)
 router.register(r'eqpchrg', EquipmentChargeViewSet)
 router.register(r'mnhrschrg', ManHoursChargeViewSet)
 
