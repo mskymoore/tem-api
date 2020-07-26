@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from datetime import timedelta as td
+from datetime import timedelta
 import mimetypes
 
 
@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+jm8bn233ye8vad#2+yck-9-#$578q18n5awqz*)37oq#v@3g!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -51,12 +51,12 @@ SEND_CONFIRMATION_EMAIL = True
 PASSWORD_CHANGED_EMAIL_CONFIRMATION = True
 USERNAME_CHANGED_EMAIL_CONFIRMATION = True
 
-
+AXES_ENABLED = True
 AXES_PROXY_COUNT = 1
 AXES_META_PRECEDENCE_ORDER = [
     'HTTP_X_FORWARDED_FOR',
-    'REMOTE_ADDR',
-]
+    'REMOTE_ADDR', ]
+
 AXES_IP_WHITELIST = ['0.0.0.0']
 AXES_COOLOFF_TIME = 3  # hours
 # Template takes precident if both are set
@@ -73,7 +73,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    'authapp',
     'temapi',
     'corsheaders',
     'django_celery_beat',
@@ -188,7 +187,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # CELERY_BEAT_SCHEDULE = {
 #     'update-database': {
 #         'task': 'temapi.tasks.do_data_update',
-#         'schedule': td(hours=6),
+#         'schedule': timedelta(hours=6),
 #         # 'args': (*args)
 #     }
 # }
@@ -201,6 +200,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -208,7 +208,7 @@ REST_FRAMEWORK = {
 
 }
 
-AUTH_USER_MODEL = 'authapp.User'
+AUTH_USER_MODEL = 'temapi.User'
 
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesBackend',
@@ -219,9 +219,36 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'SERIALIZERS': {
-        'user_create': 'authapp.serializers.UserCreateSerializer',
-        'user': 'authapp.serializers.UserCreateSerializer',
+        'user_create': 'temapi.serializers.UserCreateSerializer',
+        'user': 'temapi.serializers.UserCreateSerializer',
+        'token_create': 'temapi.serializers.TokenCreateSerializer',
     },
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
 CORS_ORIGIN_ALLOW_ALL = True

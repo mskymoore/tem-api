@@ -1,5 +1,33 @@
 from django.db import models
 from django.utils import timezone
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    email = models.EmailField(verbose_name='email',
+                              null=False, max_length=256, unique=True)
+    phone = models.CharField(null=False, max_length=256, unique=True)
+
+    REQUIRED_FIELDS = ['username', 'phone', 'first_name', 'last_name']
+
+    USERNAME_FIELD = 'email'
+
+    MANAGER = 1
+    CLIENT = 2
+    EMPLOYEE = 3
+
+    ROLE_CHOICES = (
+        (MANAGER, 'Manager'),
+        (CLIENT, 'Client'),
+        (EMPLOYEE, 'Employee')
+    )
+
+    role = models.PositiveSmallIntegerField(
+        choices=ROLE_CHOICES, blank=True, null=True)
+
+    def get_username(self):
+        return self.email
 
 
 class Discipline(models.Model):
@@ -111,6 +139,9 @@ class RateSheet(models.Model):
     def __str__(self):
         return f"{self.name} for {self.client} in {self.region} region"
 
+# TODO: add context to these models such that booleans etch
+# begin with a clause like is, am, was, are, were, had.   example: is_approved, is_disputed
+
 
 class Worklog(models.Model):
     summary = models.CharField(max_length=32000, null=False)
@@ -148,7 +179,7 @@ class EquipmentCharge(models.Model):
     date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"{self.hours}hrs of {self.equipment}"
+        return f"{self.hours} hours of {self.equipment}"
 
 
 class ManHoursCharge(models.Model):
@@ -164,4 +195,4 @@ class ManHoursCharge(models.Model):
     date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"{self.hours}hrs worked by {self.employee}"
+        return f"{self.hours} hours worked by {self.employee}"
