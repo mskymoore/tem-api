@@ -51,6 +51,18 @@ SEND_CONFIRMATION_EMAIL = True
 PASSWORD_CHANGED_EMAIL_CONFIRMATION = True
 USERNAME_CHANGED_EMAIL_CONFIRMATION = True
 
+
+AXES_PROXY_COUNT = 1
+AXES_META_PRECEDENCE_ORDER = [
+    'HTTP_X_FORWARDED_FOR',
+    'REMOTE_ADDR',
+]
+AXES_IP_WHITELIST = ['0.0.0.0']
+AXES_COOLOFF_TIME = 3  # hours
+# Template takes precident if both are set
+AXES_LOCKOUT_URL = None
+AXES_LOCKOUT_TEMPLATE = None
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -64,7 +76,9 @@ INSTALLED_APPS = [
     'authapp',
     'temapi',
     'corsheaders',
-    'django_celery_beat'
+    'django_celery_beat',
+    'axes',
+
 ]
 
 MIDDLEWARE = [
@@ -76,6 +90,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'djreact.urls'
@@ -194,6 +209,11 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'authapp.User'
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
