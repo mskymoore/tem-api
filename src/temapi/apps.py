@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class CoronaPlotsConfig(AppConfig):
+class TemApiConfig(AppConfig):
     name = 'temapi'

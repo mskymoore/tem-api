@@ -33,9 +33,23 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
+HOSTNAME = 'localhost'
+
 REDIS_HOST = 'redis'
 POSTGRES_HOST = 'db'
 # Application definition
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'skys.web.bot@gmail.com'
+EMAIL_HOST_PASSWORD = 'Hp6LPBDuJY9i2gtd8j6'
+EMAIL_USE_TLS = True
+
+SEND_ACTIVATION_EMAIL = True
+SEND_CONFIRMATION_EMAIL = True
+
+PASSWORD_CHANGED_EMAIL_CONFIRMATION = True
+USERNAME_CHANGED_EMAIL_CONFIRMATION = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -145,7 +159,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIR = [
-   os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'static')
 ]
 
 # Celery config
@@ -165,17 +179,16 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # }
 
 
-
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_AUTHENTICATION_CLASSES' :[
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
-     'DEFAULT_PERMISSION_CLASSES': [
-         'rest_framework.permissions.IsAuthenticated',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ]
 
 }
