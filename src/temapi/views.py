@@ -1,5 +1,6 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework import viewsets, mixins
+from rest_framework.permissions import IsAuthenticated
 from temapi.models import Discipline, Position, Employee, Client
 from temapi.models import Region, Site, Rate, Equipment, DayRate
 from temapi.models import RateSheet, Worklog, Dispute, EquipmentCharge
@@ -14,10 +15,7 @@ from django.urls import reverse
 from django.http import HttpResponse as Response
 from django.contrib import messages
 from djreact.settings import PROTOCOL, HOSTNAME, PORT
-# from djoser import views
 import requests
-
-# see https://djoser.readthedocs.io/en/latest/examples.html
 
 
 def reset_user_password(request, uid, token):
@@ -52,6 +50,7 @@ class CreateListUpdateRetrieveViewSet(mixins.CreateModelMixin,
                                       mixins.RetrieveModelMixin,
                                       mixins.UpdateModelMixin,
                                       viewsets.GenericViewSet):
+    permission_classes = [IsAuthenticated]
 
     pass
 
