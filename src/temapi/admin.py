@@ -1,10 +1,9 @@
 from django.contrib import admin
-
-# Register your models here.
 from .models import Discipline, Position
 from .models import Employee, Client, Region, Site, DayRate
 from .models import Rate, Equipment, EquipmentCharge, ManHoursCharge
 from .models import Worklog, Dispute, RateSheet
+from .models import User
 
 
 class ManHoursChargeAdminTab(admin.TabularInline):
@@ -55,6 +54,7 @@ class DisputeAdmin(admin.ModelAdmin):
     inlines = [ManHoursChargeAdminTab, EquipmentChargeAdminTab]
 
 
+admin.site.register(User)
 admin.site.register(Discipline, DisciplineAdmin)
 admin.site.register(Position, PositionAdmin)
 admin.site.register(Employee, EmployeeAdmin)

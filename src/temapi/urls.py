@@ -1,13 +1,12 @@
 from django.urls import path, include
-from .views import DisciplineViewSet, PositionViewSet
-from .views import EmployeeViewSet, ClientViewSet, RegionViewSet
-from .views import SiteViewSet, RateViewSet, EquipmentViewSet
-from .views import DayRateViewSet, RateSheetViewSet, WorklogViewSet
-from .views import DisputeViewSet, EquipmentChargeViewSet, ManHoursChargeViewSet
+from temapi.views import DisciplineViewSet, PositionViewSet
+from temapi.views import EmployeeViewSet, ClientViewSet, RegionViewSet
+from temapi.views import SiteViewSet, RateViewSet, EquipmentViewSet
+from temapi.views import DayRateViewSet, RateSheetViewSet, WorklogViewSet
+from temapi.views import DisputeViewSet, EquipmentChargeViewSet, ManHoursChargeViewSet
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'dr', DayRateViewSet)
 router.register(r'dis', DisciplineViewSet)
 router.register(r'pos', PositionViewSet)
 router.register(r'emp', EmployeeViewSet)
