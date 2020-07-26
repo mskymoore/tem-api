@@ -1,14 +1,8 @@
 from rest_framework import serializers
-from temapi.models import EntryDate
 from temapi.models import Discipline, Position, Employee, Client
 from temapi.models import Region, Site, Rate, Equipment, DayRate
 from temapi.models import RateSheet, Worklog, EquipmentCharge
 from temapi.models import ManHoursCharge, Dispute
-
-class EntryDateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EntryDate
-        fields = ('date',)
 
 
 class DisciplineSerializer(serializers.ModelSerializer):
@@ -91,6 +85,16 @@ class DayRateSerializer(serializers.ModelSerializer):
 
 
 class RateSheetSerializer(serializers.ModelSerializer):
+    day_rates = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='dayrate-detail'
+    )
+    rates = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='rate-detail'
+    ) 
     class Meta:
         model = RateSheet
         fields = (

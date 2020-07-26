@@ -1,6 +1,6 @@
 from celery import shared_task
 from celery.signals import worker_ready
-from .models import EntryDate, Discipline, Position
+from .models import Discipline, Position
 from .models import Employee, Client, Region, Site, DayRate
 from .models import Rate, Equipment, EquipmentCharge, ManHoursCharge
 from .models import RateSheet, Worklog, Dispute

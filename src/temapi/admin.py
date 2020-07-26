@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import EntryDate, Discipline, Position
+from .models import Discipline, Position
 from .models import Employee, Client, Region, Site, DayRate
 from .models import Rate, Equipment, EquipmentCharge, ManHoursCharge
 from .models import Worklog, Dispute, RateSheet
@@ -43,7 +43,6 @@ class DisciplineAdmin(admin.ModelAdmin):
 class DisputeAdmin(admin.ModelAdmin):
     inlines = [ManHoursChargeAdminTab, EquipmentChargeAdminTab]
 
-admin.site.register(EntryDate)
 admin.site.register(Discipline, DisciplineAdmin)
 admin.site.register(Position, PositionAdmin)
 admin.site.register(Employee, EmployeeAdmin)

@@ -1,9 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-class EntryDate(models.Model):
-    date = models.DateField()
-
 
 class Discipline(models.Model):
     name = models.CharField(max_length=256, null=False, default="discipline", unique=True)

@@ -33,6 +33,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
+HOSTNAME = 'localhost'
+
 REDIS_HOST = 'redis'
 POSTGRES_HOST = 'db'
 # Application definition
