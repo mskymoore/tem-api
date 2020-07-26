@@ -69,8 +69,8 @@ class DisputeViewSet(CreateListRetrieveViewSet):
     serializer_class = DisputeSerializer
 
 class EquipmentChargeViewSet(CreateListRetrieveViewSet):
-    queryset = Equipment.objects.all()
-    serializer_class = EquipmentSerializer
+    queryset = EquipmentCharge.objects.all()
+    serializer_class = EquipmentChargeSerializer
 
 class ManHoursChargeViewSet(CreateListRetrieveViewSet):
     queryset = ManHoursCharge.objects.all()
