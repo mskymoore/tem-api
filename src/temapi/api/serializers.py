@@ -8,7 +8,7 @@ from temapi.models import ManHoursCharge, Dispute
 class DisciplineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Discipline
-        fields = ('name',)
+        fields = ('url', 'name',)
 
 
 class PositionSerializer(serializers.ModelSerializer):
@@ -41,13 +41,13 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ('name',)
+        fields = ('url', 'name',)
 
 
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
-        fields = ('name',)
+        fields = ('url', 'name',)
 
 
 class SiteSerializer(serializers.ModelSerializer):
