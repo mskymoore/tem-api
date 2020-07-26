@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+jm8bn233ye8vad#2+yck-9-#$578q18n5awqz*)37oq#v@3g!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -51,7 +51,7 @@ SEND_CONFIRMATION_EMAIL = True
 PASSWORD_CHANGED_EMAIL_CONFIRMATION = True
 USERNAME_CHANGED_EMAIL_CONFIRMATION = True
 
-AXES_ENABLED = False
+AXES_ENABLED = True
 AXES_PROXY_COUNT = 1
 AXES_META_PRECEDENCE_ORDER = [
     'HTTP_X_FORWARDED_FOR',

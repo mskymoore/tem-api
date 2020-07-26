@@ -30,9 +30,6 @@ class TokenCreateSerializer(serializers.Serializer):
     def validate(self, attrs):
         password = attrs.get("password")
         params = {settings.LOGIN_FIELD: attrs.get(settings.LOGIN_FIELD)}
-        print("HERES THE REQUEST")
-        print(self.context.get(
-            "request"))
         self.user = authenticate(request=self.context.get(
             "request"), **params, password=password)
         if not self.user:
