@@ -12,15 +12,20 @@ class DisciplineSerializer(serializers.ModelSerializer):
 
 
 class PositionSerializer(serializers.ModelSerializer):
-    discipline = serializers.SlugRelatedField(slug_field='name', queryset=Discipline.objects.all())
+    discipline = serializers.SlugRelatedField(
+        slug_field='name', queryset=Discipline.objects.all())
+
     class Meta:
         model = Position
         fields = ('url', 'name', 'discipline')
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    position = serializers.SlugRelatedField(slug_field='name', queryset=Position.objects.all())
-    discipline = serializers.SlugRelatedField(slug_field='name', queryset=Discipline.objects.all())
+    position = serializers.SlugRelatedField(
+        slug_field='name', queryset=Position.objects.all())
+    discipline = serializers.SlugRelatedField(
+        slug_field='name', queryset=Discipline.objects.all())
+
     class Meta:
         model = Employee
         fields = (
@@ -46,7 +51,9 @@ class RegionSerializer(serializers.ModelSerializer):
 
 
 class SiteSerializer(serializers.ModelSerializer):
-    region = serializers.SlugRelatedField(slug_field='name', queryset=Region.objects.all())
+    region = serializers.SlugRelatedField(
+        slug_field='name', queryset=Region.objects.all())
+
     class Meta:
         model = Site
         fields = (
@@ -59,7 +66,9 @@ class SiteSerializer(serializers.ModelSerializer):
 
 
 class RateSerializer(serializers.ModelSerializer):
-    position = serializers.SlugRelatedField(slug_field='name', queryset=Position.objects.all())
+    position = serializers.SlugRelatedField(
+        slug_field='name', queryset=Position.objects.all())
+
     class Meta:
         model = Rate
         fields = (
@@ -85,6 +94,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
 class DayRateSerializer(serializers.ModelSerializer):
     equipment = serializers.HyperlinkedRelatedField(
         view_name='equipment-detail', queryset=Equipment.objects.all())
+
     class Meta:
         model = DayRate
         fields = (
@@ -97,8 +107,10 @@ class DayRateSerializer(serializers.ModelSerializer):
 
 
 class RateSheetSerializer(serializers.ModelSerializer):
-    client = serializers.SlugRelatedField(slug_field='name', queryset=Client.objects.all())
-    region = serializers.SlugRelatedField(slug_field='name', queryset=Region.objects.all())
+    client = serializers.SlugRelatedField(
+        slug_field='name', queryset=Client.objects.all())
+    region = serializers.SlugRelatedField(
+        slug_field='name', queryset=Region.objects.all())
     day_rates = serializers.HyperlinkedRelatedField(
         many=True,
         view_name='dayrate-detail',
@@ -108,7 +120,8 @@ class RateSheetSerializer(serializers.ModelSerializer):
         many=True,
         view_name='rate-detail',
         queryset=Rate.objects.all()
-    ) 
+    )
+
     class Meta:
         model = RateSheet
         fields = (
@@ -127,6 +140,7 @@ class EquipmentChargeSerializer(serializers.ModelSerializer):
     worklog = serializers.HyperlinkedRelatedField(
         view_name='worklog-detail', queryset=Worklog.objects.all()
     )
+
     class Meta:
         model = EquipmentCharge
         fields = (
@@ -148,7 +162,9 @@ class ManHoursChargeSerializer(serializers.ModelSerializer):
     dispute = serializers.HyperlinkedRelatedField(
         view_name='dispute-detail', queryset=Dispute.objects.all()
     )
-    position = serializers.SlugRelatedField(slug_field='name', queryset=Position.objects.all())
+    position = serializers.SlugRelatedField(
+        slug_field='name', queryset=Position.objects.all())
+
     class Meta:
         model = ManHoursCharge
         fields = (
@@ -163,8 +179,10 @@ class ManHoursChargeSerializer(serializers.ModelSerializer):
 
 
 class WorklogSerializer(serializers.ModelSerializer):
-    client = serializers.SlugRelatedField(slug_field='name', queryset=Client.objects.all())
-    site = serializers.SlugRelatedField(slug_field='name', queryset=Site.objects.all())
+    client = serializers.SlugRelatedField(
+        slug_field='name', queryset=Client.objects.all())
+    site = serializers.SlugRelatedField(
+        slug_field='name', queryset=Site.objects.all())
     manhours_charges = ManHoursChargeSerializer(many=True)
     equipment_charges = EquipmentChargeSerializer(many=True)
 
@@ -189,12 +207,13 @@ class DisputeSerializer(serializers.ModelSerializer):
     )
     manhours_charges = ManHoursChargeSerializer(many=True)
     equipment_charges = EquipmentChargeSerializer(many=True)
+
     class Meta:
         model = Dispute
         fields = (
             'url',
             'worklog',
-            'summary', 
+            'summary',
             'notes',
             'resolved',
             'manhours_charges',

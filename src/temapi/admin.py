@@ -10,38 +10,50 @@ from .models import Worklog, Dispute, RateSheet
 class ManHoursChargeAdminTab(admin.TabularInline):
     model = ManHoursCharge
 
+
 class EquipmentChargeAdminTab(admin.TabularInline):
     model = EquipmentCharge
+
 
 class PositionAdminTab(admin.TabularInline):
     model = Position
 
+
 class WorklogAdminTab(admin.TabularInline):
     model = Worklog
 
+
 class WorklogAdmin(admin.ModelAdmin):
-   inlines = [ManHoursChargeAdminTab, EquipmentChargeAdminTab]
+    inlines = [ManHoursChargeAdminTab, EquipmentChargeAdminTab]
+
 
 class EquipmentAdmin(admin.ModelAdmin):
-    inlines = [EquipmentChargeAdminTab,]
+    inlines = [EquipmentChargeAdminTab, ]
+
 
 class EmployeeAdmin(admin.ModelAdmin):
-    inlines = [ManHoursChargeAdminTab,]
+    inlines = [ManHoursChargeAdminTab, ]
+
 
 class PositionAdmin(admin.ModelAdmin):
-    inlines = [ManHoursChargeAdminTab,]
+    inlines = [ManHoursChargeAdminTab, ]
+
 
 class ClientAdmin(admin.ModelAdmin):
-    inlines = [WorklogAdminTab,]
+    inlines = [WorklogAdminTab, ]
+
 
 class SiteAdmin(admin.ModelAdmin):
-    inlines = [WorklogAdminTab,]
+    inlines = [WorklogAdminTab, ]
+
 
 class DisciplineAdmin(admin.ModelAdmin):
     inlines = [PositionAdminTab, ]
 
+
 class DisputeAdmin(admin.ModelAdmin):
     inlines = [ManHoursChargeAdminTab, EquipmentChargeAdminTab]
+
 
 admin.site.register(Discipline, DisciplineAdmin)
 admin.site.register(Position, PositionAdmin)

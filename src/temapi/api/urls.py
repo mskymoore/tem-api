@@ -4,7 +4,6 @@ from .views import EmployeeViewSet, ClientViewSet, RegionViewSet
 from .views import SiteViewSet, RateViewSet, EquipmentViewSet
 from .views import DayRateViewSet, RateSheetViewSet, WorklogViewSet
 from .views import DisputeViewSet, EquipmentChargeViewSet, ManHoursChargeViewSet
-
 from rest_framework import routers
 
 router = routers.DefaultRouter()
@@ -25,5 +24,5 @@ router.register(r'eqpchrg', EquipmentChargeViewSet)
 router.register(r'mnhrschrg', ManHoursChargeViewSet)
 
 urlpatterns = [
-   path('', include(router.urls)),
+    path('', include(router.urls)),
 ]
