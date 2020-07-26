@@ -39,6 +39,18 @@ REDIS_HOST = 'redis'
 POSTGRES_HOST = 'db'
 # Application definition
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'skys.web.bot@gmail.com'
+EMAIL_HOST_PASSWORD = 'Hp6LPBDuJY9i2gtd8j6'
+EMAIL_USE_TLS = True
+
+SEND_ACTIVATION_EMAIL = True
+SEND_CONFIRMATION_EMAIL = True
+
+PASSWORD_CHANGED_EMAIL_CONFIRMATION = True
+USERNAME_CHANGED_EMAIL_CONFIRMATION = True
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
