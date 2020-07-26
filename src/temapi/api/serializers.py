@@ -122,6 +122,7 @@ class EquipmentChargeSerializer(serializers.ModelSerializer):
             'hours',
             'equipment',
             'worklog',
+            'dispute',
             'date',
         )
 
@@ -134,6 +135,7 @@ class ManHoursChargeSerializer(serializers.ModelSerializer):
             'employee',
             'position',
             'worklog',
+            'dispute',
             'date',
         )
 
@@ -145,6 +147,5 @@ class DisputeSerializer(serializers.ModelSerializer):
             'worklog',
             'summary', 
             'notes',
-            'equipment_charges',
-            'manhours_charges',
+            'resolved'
         )
