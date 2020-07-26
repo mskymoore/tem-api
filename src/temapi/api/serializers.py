@@ -15,7 +15,7 @@ class PositionSerializer(serializers.ModelSerializer):
     discipline = serializers.SlugRelatedField(slug_field='name', queryset=Discipline.objects.all())
     class Meta:
         model = Position
-        fields = ('name', 'discipline')
+        fields = ('url', 'name', 'discipline')
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -24,6 +24,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = (
+            'url',
             'number',
             'position',
             'discipline',
@@ -49,6 +50,7 @@ class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site
         fields = (
+            'url',
             'name',
             'lat',
             'lon',
@@ -61,6 +63,7 @@ class RateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rate
         fields = (
+            'url',
             'name',
             'cur_token',
             'cur_per_hr',
@@ -73,6 +76,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipment
         fields = (
+            'url',
             'name',
             'number',
         )
@@ -84,6 +88,7 @@ class DayRateSerializer(serializers.ModelSerializer):
     class Meta:
         model = DayRate
         fields = (
+            'url',
             'name',
             'cur_token',
             'cur_per_day',
@@ -96,17 +101,18 @@ class RateSheetSerializer(serializers.ModelSerializer):
     region = serializers.SlugRelatedField(slug_field='name', queryset=Region.objects.all())
     day_rates = serializers.HyperlinkedRelatedField(
         many=True,
-        read_only=True,
-        view_name='dayrate-detail'
+        view_name='dayrate-detail',
+        queryset=DayRate.objects.all()
     )
     rates = serializers.HyperlinkedRelatedField(
         many=True,
-        read_only=True,
-        view_name='rate-detail'
+        view_name='rate-detail',
+        queryset=Rate.objects.all()
     ) 
     class Meta:
         model = RateSheet
         fields = (
+            'url',
             'name',
             'client',
             'region',
@@ -165,6 +171,7 @@ class WorklogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Worklog
         fields = (
+            'url',
             'summary',
             'client',
             'site',
@@ -185,6 +192,7 @@ class DisputeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dispute
         fields = (
+            'url',
             'worklog',
             'summary', 
             'notes',
