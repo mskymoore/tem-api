@@ -115,21 +115,6 @@ class RateSheetSerializer(serializers.ModelSerializer):
         )
 
 
-class WorklogSerializer(serializers.ModelSerializer):
-    client = serializers.SlugRelatedField(slug_field='name', queryset=Client.objects.all())
-    site = serializers.SlugRelatedField(slug_field='name', queryset=Site.objects.all())
-    class Meta:
-        model = Worklog
-        fields = (
-            'summary',
-            'client',
-            'site',
-            'approved',
-            'disputed',
-            'date',
-        )
-
-
 class EquipmentChargeSerializer(serializers.ModelSerializer):
     equipment = serializers.HyperlinkedRelatedField(
         view_name='equipment-detail', queryset=Equipment.objects.all())
@@ -139,6 +124,7 @@ class EquipmentChargeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EquipmentCharge
         fields = (
+            'url',
             'hours',
             'equipment',
             'worklog',
@@ -160,6 +146,7 @@ class ManHoursChargeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ManHoursCharge
         fields = (
+            'url',
             'hours',
             'employee',
             'position',
@@ -169,15 +156,39 @@ class ManHoursChargeSerializer(serializers.ModelSerializer):
         )
 
 
+class WorklogSerializer(serializers.ModelSerializer):
+    client = serializers.SlugRelatedField(slug_field='name', queryset=Client.objects.all())
+    site = serializers.SlugRelatedField(slug_field='name', queryset=Site.objects.all())
+    manhours_charges = ManHoursChargeSerializer(many=True)
+    equipment_charges = EquipmentChargeSerializer(many=True)
+
+    class Meta:
+        model = Worklog
+        fields = (
+            'summary',
+            'client',
+            'site',
+            'approved',
+            'disputed',
+            'manhours_charges',
+            'equipment_charges',
+            'date',
+        )
+
+
 class DisputeSerializer(serializers.ModelSerializer):
     worklog = serializers.HyperlinkedRelatedField(
         view_name='worklog-detail', queryset=Worklog.objects.all()
-    ) 
+    )
+    manhours_charges = ManHoursChargeSerializer(many=True)
+    equipment_charges = EquipmentChargeSerializer(many=True)
     class Meta:
         model = Dispute
         fields = (
             'worklog',
             'summary', 
             'notes',
-            'resolved'
+            'resolved',
+            'manhours_charges',
+            'equipment_charges',
         )
