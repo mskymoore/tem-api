@@ -77,7 +77,7 @@ class DayRate(models.Model):
     equipment = models.ForeignKey(Equipment, related_name='day_rates', on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"Equipment: {self.equipment} at {self.cur_token}{self.cur_per_day}/day"
+        return f"{self.equipment} at {self.cur_token}{self.cur_per_day}/day"
 
 
 class RateSheet(models.Model):
