@@ -13,6 +13,9 @@ class ManHoursChargeAdminTab(admin.TabularInline):
 class EquipmentChargeAdminTab(admin.TabularInline):
     model = EquipmentCharge
 
+class PositionAdminTab(admin.TabularInline):
+    model = Position
+
 class WorklogAdminTab(admin.TabularInline):
     model = Worklog
 
@@ -34,8 +37,14 @@ class ClientAdmin(admin.ModelAdmin):
 class SiteAdmin(admin.ModelAdmin):
     inlines = [WorklogAdminTab,]
 
+class DisciplineAdmin(admin.ModelAdmin):
+    inlines = [PositionAdminTab, ]
+
+class DisputeAdmin(admin.ModelAdmin):
+    inlines = [ManHoursChargeAdminTab, EquipmentChargeAdminTab]
+
 admin.site.register(EntryDate)
-admin.site.register(Discipline)
+admin.site.register(Discipline, DisciplineAdmin)
 admin.site.register(Position, PositionAdmin)
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Client, ClientAdmin)
@@ -48,4 +57,4 @@ admin.site.register(EquipmentCharge)
 admin.site.register(ManHoursCharge)
 admin.site.register(RateSheet)
 admin.site.register(Worklog, WorklogAdmin)
-admin.site.register(Dispute)
+admin.site.register(Dispute, DisputeAdmin)
