@@ -9,8 +9,6 @@ from .serializers import ClientSerializer, RegionSerializer, SiteSerializer
 from .serializers import RateSerializer, EquipmentSerializer, DayRateSerializer
 from .serializers import RateSheetSerializer, WorklogSerializer, DisputeSerializer
 from .serializers import EquipmentChargeSerializer, ManHoursChargeSerializer
-from django.http import HttpResponse
-import json
 
 
 class CreateListUpdateRetrieveViewSet(mixins.CreateModelMixin,

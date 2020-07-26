@@ -11,5 +11,18 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
 
+    MANAGER = 1
+    CLIENT = 2
+    EMPLOYEE = 3
+
+    ROLE_CHOICES = (
+        (MANAGER, 'Manager'),
+        (CLIENT, 'Client'),
+        (EMPLOYEE, 'Employee')
+    )
+
+    role = models.PositiveSmallIntegerField(
+        choices=ROLE_CHOICES, blank=True, null=True)
+
     def get_username(self):
         return self.email
