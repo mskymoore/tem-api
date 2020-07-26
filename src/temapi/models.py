@@ -111,6 +111,9 @@ class RateSheet(models.Model):
     def __str__(self):
         return f"{self.name} for {self.client} in {self.region} region"
 
+# TODO: add context to these models such that booleans etch
+# begin with a clause like is, am, was, are, were, had.   example: is_approved, is_disputed
+
 
 class Worklog(models.Model):
     summary = models.CharField(max_length=32000, null=False)
@@ -148,7 +151,7 @@ class EquipmentCharge(models.Model):
     date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"{self.hours}hrs of {self.equipment}"
+        return f"{self.hours} hours of {self.equipment}"
 
 
 class ManHoursCharge(models.Model):
@@ -164,4 +167,4 @@ class ManHoursCharge(models.Model):
     date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return f"{self.hours}hrs worked by {self.employee}"
+        return f"{self.hours} hours worked by {self.employee}"
