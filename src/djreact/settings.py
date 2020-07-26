@@ -33,7 +33,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+PROTOCOL = 'http'
 HOSTNAME = 'localhost'
+PORT = ':3333'
 
 REDIS_HOST = 'redis'
 POSTGRES_HOST = 'db'
@@ -50,6 +52,7 @@ SEND_CONFIRMATION_EMAIL = True
 
 PASSWORD_CHANGED_EMAIL_CONFIRMATION = True
 USERNAME_CHANGED_EMAIL_CONFIRMATION = True
+
 
 AXES_ENABLED = True
 AXES_PROXY_COUNT = 1
@@ -218,6 +221,7 @@ AUTHENTICATION_BACKENDS = [
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
+    'PASSWORD_RESET_CONFIRM_URL': "api/reset_password/{uid}/{token}",
     'SERIALIZERS': {
         'user_create': 'temapi.serializers.UserCreateSerializer',
         'user': 'temapi.serializers.UserCreateSerializer',

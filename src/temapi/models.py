@@ -4,30 +4,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class User(AbstractUser):
-    email = models.EmailField(verbose_name='email',
-                              null=False, max_length=256, unique=True)
-    phone = models.CharField(null=False, max_length=256, unique=True)
+class Client(models.Model):
+    name = models.CharField(max_length=256, null=False,
+                            default="client", unique=True)
 
-    REQUIRED_FIELDS = ['username', 'phone', 'first_name', 'last_name']
-
-    USERNAME_FIELD = 'email'
-
-    MANAGER = 1
-    CLIENT = 2
-    EMPLOYEE = 3
-
-    ROLE_CHOICES = (
-        (MANAGER, 'Manager'),
-        (CLIENT, 'Client'),
-        (EMPLOYEE, 'Employee')
-    )
-
-    role = models.PositiveSmallIntegerField(
-        choices=ROLE_CHOICES, blank=True, null=True)
-
-    def get_username(self):
-        return self.email
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Discipline(models.Model):
@@ -54,21 +36,44 @@ class Employee(models.Model):
         Position, related_name='employees', on_delete=models.DO_NOTHING)
     discipline = models.ForeignKey(
         Discipline, related_name='employees', on_delete=models.DO_NOTHING)
-    name = models.CharField(max_length=256, null=False,
-                            default="employee", unique=False)
-    email = models.EmailField(
-        max_length=256, null=False, default="employee@example.com", unique=True)
 
     def __str__(self):
-        return f"{self.name}, {self.email}, {self.number}, {self.position}, {self.discipline}"
+        return f"{self.number}, {self.position}, {self.discipline}"
 
 
-class Client(models.Model):
-    name = models.CharField(max_length=256, null=False,
-                            default="client", unique=True)
+class User(AbstractUser):
+    email = models.EmailField(verbose_name='email',
+                              null=False, max_length=256, unique=True)
+    phone = models.CharField(null=False, max_length=256, unique=True)
 
-    def __str__(self):
-        return f"{self.name}"
+    # this is how we determine worklog view permissions, and ability to dispute worklogs
+    client = models.ForeignKey(
+        Client, related_name='users', on_delete=models.CASCADE, null=True, blank=True)
+
+    # this is how we determine ability to submit worklogs, and resolve disputes
+    employee = models.ForeignKey(
+        Employee, related_name='users', on_delete=models.CASCADE, null=True, blank=True)
+
+    REQUIRED_FIELDS = ['username', 'phone', 'first_name', 'last_name']
+
+    USERNAME_FIELD = 'email'
+
+    MANAGER = 1
+    CLIENT = 2
+    EMPLOYEE = 3
+
+    # this is how we determine templates and views to render
+    ROLE_CHOICES = (
+        (MANAGER, 'Manager'),
+        (CLIENT, 'Client'),
+        (EMPLOYEE, 'Employee')
+    )
+
+    role = models.PositiveSmallIntegerField(
+        choices=ROLE_CHOICES, blank=True, null=True)
+
+    def get_username(self):
+        return self.email
 
 
 class Region(models.Model):
@@ -94,7 +99,7 @@ class Site(models.Model):
 
 
 class Rate(models.Model):
-    name = models.CharField(max_length=256, null=True)
+    name = models.CharField(max_length=256, null=True, blank=True)
     cur_token = models.CharField(max_length=1, null=False, default="$")
     cur_per_hr = models.FloatField(null=False, default=0)
     ot_cur_per_hr = models.FloatField(null=False, default=0)
@@ -106,7 +111,7 @@ class Rate(models.Model):
 
 
 class Equipment(models.Model):
-    name = models.CharField(max_length=256, null=True)
+    name = models.CharField(max_length=256, null=True, blank=True)
     number = models.PositiveIntegerField(null=False, default=1, unique=True)
 
     def __str__(self):
@@ -117,7 +122,7 @@ class Equipment(models.Model):
 
 
 class DayRate(models.Model):
-    name = models.CharField(max_length=256, null=True)
+    name = models.CharField(max_length=256, null=True, blank=True)
     cur_token = models.CharField(max_length=1, null=False, default="$")
     cur_per_day = models.FloatField(null=False, default=0)
     equipment = models.ForeignKey(
@@ -161,7 +166,7 @@ class Dispute(models.Model):
     worklog = models.ForeignKey(
         Worklog, related_name='disputes', on_delete=models.DO_NOTHING)
     summary = models.CharField(max_length=1008, null=False)
-    notes = models.CharField(max_length=32000, null=True)
+    notes = models.CharField(max_length=32000, null=True, blank=True)
     resolved = models.BooleanField(null=False, default=False)
 
     def __str__(self):
@@ -175,7 +180,7 @@ class EquipmentCharge(models.Model):
     worklog = models.ForeignKey(
         Worklog, related_name='equipment_charges', on_delete=models.DO_NOTHING)
     dispute = models.ForeignKey(
-        Dispute, related_name='equipment_charges', on_delete=models.DO_NOTHING, null=True)
+        Dispute, related_name='equipment_charges', on_delete=models.DO_NOTHING, null=True, blank=True)
     date = models.DateField(auto_now=True)
 
     def __str__(self):
@@ -191,7 +196,7 @@ class ManHoursCharge(models.Model):
     worklog = models.ForeignKey(
         Worklog, related_name='manhours_charges', on_delete=models.DO_NOTHING)
     dispute = models.ForeignKey(
-        Dispute, related_name='manhours_charges', on_delete=models.DO_NOTHING, null=True)
+        Dispute, related_name='manhours_charges', on_delete=models.DO_NOTHING, null=True, blank=True)
     date = models.DateField(auto_now=True)
 
     def __str__(self):

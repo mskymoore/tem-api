@@ -22,6 +22,10 @@ class WorklogAdminTab(admin.TabularInline):
     model = Worklog
 
 
+class UserAdminTab(admin.TabularInline):
+    model = User
+
+
 class WorklogAdmin(admin.ModelAdmin):
     inlines = [ManHoursChargeAdminTab, EquipmentChargeAdminTab]
 
@@ -31,7 +35,7 @@ class EquipmentAdmin(admin.ModelAdmin):
 
 
 class EmployeeAdmin(admin.ModelAdmin):
-    inlines = [ManHoursChargeAdminTab, ]
+    inlines = [ManHoursChargeAdminTab, UserAdminTab]
 
 
 class PositionAdmin(admin.ModelAdmin):
@@ -39,7 +43,7 @@ class PositionAdmin(admin.ModelAdmin):
 
 
 class ClientAdmin(admin.ModelAdmin):
-    inlines = [WorklogAdminTab, ]
+    inlines = [WorklogAdminTab, UserAdminTab]
 
 
 class SiteAdmin(admin.ModelAdmin):
