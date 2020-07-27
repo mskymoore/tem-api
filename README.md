@@ -3,7 +3,7 @@
 ### for first run:
 
 ```
-docker-compose up db tem-api nginx redis
+docker-compose up
 ```
 
 #### wait for migrations to apply...
@@ -11,7 +11,9 @@ docker-compose up db tem-api nginx redis
 #### then load sample data:
 
 ```
-docker-compose up celery
+docker exec -u 0 -it container_name python manage.py shell
+>> from temapi.tasks import load_example_data
+>> load_example_data()
 ```
 
 #### then create superuser:
@@ -20,13 +22,13 @@ docker-compose up celery
 docker exec -u 0 -it localhost python manage.py createsuperuser
 ```
 
-### After first run setup, to start:
+### To start:
 
 ```
 docker-compose up
 ```
 
-### After first run setup, to stop:
+### To stop:
 
 ```
 docker-compose down
