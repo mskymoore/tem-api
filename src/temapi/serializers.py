@@ -72,8 +72,6 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'number',
             'position',
             'discipline',
-            'name',
-            'email'
         )
 
 
@@ -150,16 +148,8 @@ class RateSheetSerializer(serializers.ModelSerializer):
         slug_field='name', queryset=Client.objects.all())
     region = serializers.SlugRelatedField(
         slug_field='name', queryset=Region.objects.all())
-    day_rates = serializers.HyperlinkedRelatedField(
-        many=True,
-        view_name='dayrate-detail',
-        queryset=DayRate.objects.all()
-    )
-    rates = serializers.HyperlinkedRelatedField(
-        many=True,
-        view_name='rate-detail',
-        queryset=Rate.objects.all()
-    )
+    day_rates = DayRateSerializer(many=True)
+    rates = RateSerializer(many=True)
 
     class Meta:
         model = RateSheet

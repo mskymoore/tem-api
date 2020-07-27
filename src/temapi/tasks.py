@@ -287,9 +287,7 @@ def load_example_data(sender=None, conf=None, **kwargs):
 
     for e in employees:
         Employee(
-            name=e[name],
             number=e[number],
-            email=e[email],
             position=Position.objects.filter(name=e[position]).first(),
             discipline=Discipline.objects.filter(name=e[discipline]).first()
         ).save()
@@ -320,7 +318,8 @@ def load_example_data(sender=None, conf=None, **kwargs):
     for m in manhourscharges:
         mc = ManHoursCharge(
             hours=m[hours],
-            employee=Employee.objects.filter(name=m[employee][name]).first(),
+            employee=Employee.objects.filter(
+                number=m[employee][number]).first(),
             position=Position.objects.filter(name=m[position][name]).first(),
             worklog=wl
         )
@@ -344,4 +343,4 @@ def load_example_data(sender=None, conf=None, **kwargs):
         ds.save()
 
         ds.manhours_charges.add(ManHoursCharge.objects.filter(
-            employee__name=d[employee][name], hours=8).first())
+            employee__number=d[employee][number], hours=8).first())

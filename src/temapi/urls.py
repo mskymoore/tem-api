@@ -1,5 +1,6 @@
 from django.urls import path, include
-from temapi.views import DisciplineViewSet, PositionViewSet
+
+from temapi.views import DisciplineViewSet, PositionViewSet, reset_user_password
 from temapi.views import EmployeeViewSet, ClientViewSet, RegionViewSet
 from temapi.views import SiteViewSet, RateViewSet, EquipmentViewSet
 from temapi.views import DayRateViewSet, RateSheetViewSet, WorklogViewSet
@@ -16,12 +17,14 @@ router.register(r'sit', SiteViewSet)
 router.register(r'rat', RateViewSet)
 router.register(r'eqp', EquipmentViewSet)
 router.register(r'drt', DayRateViewSet)
-router.register(r'rsh', RateSheetViewSet)
-router.register(r'wrk', WorklogViewSet)
+router.register(r'rsh', RateSheetViewSet, basename='ratesheet')
+router.register(r'wrk', WorklogViewSet, basename='worklog')
 router.register(r'disp', DisputeViewSet)
 router.register(r'eqpchrg', EquipmentChargeViewSet)
 router.register(r'mnhrschrg', ManHoursChargeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('reset_password/<uid>/<token>',
+         reset_user_password, name='reset-pasword'),
 ]
