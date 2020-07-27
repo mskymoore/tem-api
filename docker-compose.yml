@@ -43,7 +43,6 @@ services:
 
   tem-api:
     build: .
-    container_name: localhost
     image: tem-api:latest
     command: sh runserver.sh
     networks:

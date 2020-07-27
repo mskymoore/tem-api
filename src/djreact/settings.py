@@ -36,6 +36,7 @@ PROTOCOL = 'http'
 HOSTNAME = 'localhost'
 PORT = ':3333'
 USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
 
 REDIS_HOST = 'redis'
@@ -193,7 +194,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BEAT_SCHEDULE = {
     'synchronize worklogs included employees': {
         'task': 'temapi.tasks.synchronize_worklogs_included_employees',
-        'schedule': timedelta(seconds=30),
+        'schedule': timedelta(minutes=5),
         # 'args': (*args)
     },
     'test task': {

@@ -262,7 +262,7 @@ def synchronize_worklogs_included_employees():
     for worklog in Worklog.objects.all():
         cur_included_employees = set()
 
-        for charge in worklog.manhours_charges:
+        for charge in worklog.manhours_charges.all():
             cur_included_employees.add(charge.employee)
 
             try:
@@ -271,7 +271,7 @@ def synchronize_worklogs_included_employees():
             except Exception as e:
                 print(f"employee already encluded perhaps: {e}")
 
-        for employee in worklog.included_employees:
+        for employee in worklog.included_employees.all():
 
             if employee not in employees:
                 worklog.included_employees.remove(employee)

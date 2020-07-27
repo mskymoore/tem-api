@@ -3,10 +3,15 @@
 ### for first run:
 
 ```
-docker-compose up
+docker-compose up db redis tem-api nginx
 ```
 
 #### wait for migrations to apply...
+
+```
+# press ctrl + \ to drop from the docker-compose output
+docker-compose up
+```
 
 #### then load sample data:
 
