@@ -1,6 +1,8 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
+from temapi.permissions import IsClientOfObjectOrManager, IsManager, IsEmployee
+from temapi.permissions import IsManagerOrClient
 from temapi.models import Discipline, Position, Employee, Client
 from temapi.models import Region, Site, Rate, Equipment, DayRate
 from temapi.models import RateSheet, Worklog, Dispute, EquipmentCharge
@@ -86,6 +88,7 @@ class SiteViewSet(CreateListUpdateRetrieveViewSet):
 
 
 class RateViewSet(CreateListUpdateRetrieveViewSet):
+    permission_classes = [IsManager]
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
 
@@ -96,18 +99,49 @@ class EquipmentViewSet(CreateListUpdateRetrieveViewSet):
 
 
 class DayRateViewSet(CreateListUpdateRetrieveViewSet):
+    permission_classes = [IsManager]
     queryset = DayRate.objects.all()
     serializer_class = DayRateSerializer
 
 
 class RateSheetViewSet(CreateListUpdateRetrieveViewSet):
-    queryset = RateSheet.objects.all()
+    permission_classes = [IsManagerOrClient, IsClientOfObjectOrManager]
     serializer_class = RateSheetSerializer
+    queryset = RateSheet.objects.all()
+
+    def get_queryset(self):
+        if self.request.user.role == 1:
+            return RateSheet.objects.all()
+
+        elif self.request.user.role == 2:
+
+            if self.request.user.client is None:
+                return RateSheet.objects.none()
+
+            return RateSheet.objects.filter(client=self.request.user.client).all()
+
+        else:
+            return RateSheet.objects.none()
 
 
 class WorklogViewSet(CreateListUpdateRetrieveViewSet):
-    queryset = Worklog.objects.all()
     serializer_class = WorklogSerializer
+
+    def get_queryset(self):
+
+        if self.request.user.role == 1 or self.request.user.role == 3:
+            return Worklog.objects.all()
+
+        elif self.request.user.role == 2:
+
+            if self.request.user.client is None:
+                return Worklog.objects.none()
+
+            return Worklog.objects.filter(client=self.request.user.client).all()
+
+        else:
+
+            return Worklog.objects.none()
 
 
 class DisputeViewSet(CreateListUpdateRetrieveViewSet):
