@@ -3,7 +3,7 @@ from celery.signals import worker_ready
 from .models import Discipline, Position
 from .models import Employee, Client, Region, Site, DayRate
 from .models import Rate, Equipment, EquipmentCharge, ManHoursCharge
-from .models import RateSheet, Worklog, Dispute
+from .models import RateSheet, Worklog, Dispute, User
 
 
 mechanical = "mechanical"
@@ -45,7 +45,11 @@ hours = "hours"
 employee = "employee"
 worklog = "worklog"
 notes = "notes"
-
+first_name = "first_name"
+last_name = "last_name"
+phone = "phone"
+username = "username"
+password = "password"
 
 disciplines = [
     mechanical,
@@ -72,6 +76,38 @@ clients = [
 regions = [
     westtx,
     southnm
+]
+
+
+users = [
+    {
+        first_name: "Jeff",
+        last_name: "Mooore",
+        phone: "1234567890",
+        username: "wjeffmoore@gmail.com",
+        password: "theManager"
+    },
+    {
+        first_name: "Justin",
+        last_name: "Griffin",
+        phone: "9999999999",
+        username: "jgriffin555@comcast.net",
+        password: "theDesigner"
+    },
+    {
+        first_name: "Trae",
+        last_name: "Moore",
+        phone: "6666666666",
+        username: "btraemoore@gmail.com",
+        password: "theArchitect"
+    },
+    {
+        first_name: "Sky",
+        last_name: "Moore",
+        phone: "4095193333",
+        username: "mskymoore@gmail.com",
+        password: "theEngineer"
+    },
 ]
 
 
@@ -217,20 +253,50 @@ disputes = [
 
 @shared_task
 def do_data_update():
-    pass
+    print("TASK TASK TASK")
 
 
 @shared_task
 def synchronize_worklogs_included_employees():
-    # for each worklog in all worklogs
-    # create list of employees who have man hours charges in this worklog
-    # synchronize manytomany included_employees on worklog with this list
+    print("syncronizing worklogs")
+    for worklog in Worklog.objects.all():
+        cur_included_employees = set()
 
-    pass
+        for charge in worklog.manhours_charges:
+            cur_included_employees.add(charge.employee)
+
+            try:
+                worklog.included_employees.add(charge.employee)
+
+            except Exception as e:
+                print(f"employee already encluded perhaps: {e}")
+
+        for employee in worklog.included_employees:
+
+            if employee not in employees:
+                worklog.included_employees.remove(employee)
 
 
 @worker_ready.connect
-def load_example_data(sender=None, conf=None, **kwargs):
+def create_users(sender=None, conf=None, **kwargs):
+    for u in users:
+        print(f"Creating user {u[username]}")
+        try:
+            User.objects.create_superuser(
+                username=u[username],
+                email=u[username],
+                password=u[password],
+                first_name=u[first_name],
+                last_name=u[last_name],
+                phone=u[phone]
+            )
+
+        except Exception as e:
+            print(f"User {u[username]} already exists")
+
+
+@shared_task
+def load_example_data():
 
     for disc in disciplines:
         print(f"adding discipline {disc}")
@@ -316,6 +382,7 @@ def load_example_data(sender=None, conf=None, **kwargs):
             rs.day_rates.add(DayRate.objects.filter(name=drate[name]).first())
 
     wl = Worklog(
+        created_by=User.objects.filter(username='mskymoore@gmail.com').first(),
         summary=worklogs[0][summary],
         client=Client.objects.filter(name=worklogs[0][client]).first(),
         site=Site.objects.filter(name=worklogs[0][site][name]).first(),
@@ -326,6 +393,8 @@ def load_example_data(sender=None, conf=None, **kwargs):
 
     for m in manhourscharges:
         mc = ManHoursCharge(
+            created_by=User.objects.filter(
+                username='mskymoore@gmail.com').first(),
             hours=m[hours],
             employee=Employee.objects.filter(
                 number=m[employee][number]).first(),
@@ -336,6 +405,8 @@ def load_example_data(sender=None, conf=None, **kwargs):
 
     for e in equipmentcharges:
         ec = EquipmentCharge(
+            created_by=User.objects.filter(
+                username='mskymoore@gmail.com').first(),
             hours=e[hours],
             equipment=Equipment.objects.filter(
                 name=e[equipment_][name]).first(),
@@ -345,6 +416,8 @@ def load_example_data(sender=None, conf=None, **kwargs):
 
     for d in disputes:
         ds = Dispute(
+            created_by=User.objects.filter(
+                username='mskymoore@gmail.com').first(),
             worklog=wl,
             summary=d[summary],
             notes=d[notes]

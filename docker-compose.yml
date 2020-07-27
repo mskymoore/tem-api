@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 networks:
   apinetwork:
@@ -10,7 +10,6 @@ volumes:
   redis_data:
 
 services:
-
   db:
     image: postgres:latest
     volumes:
@@ -21,7 +20,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
 
   redis:
-    image: redis:latest
+    image: redis:5-buster
     networks:
       - tasknetwork
     volumes:
@@ -31,7 +30,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - 127.0.0.1:3333:80 
+      - 127.0.0.1:3333:80
       # - 0.0.0.0:3333:80
       # - 0.0.0.0:443:443
     networks:
@@ -56,7 +55,7 @@ services:
       - db
       - redis
     restart: always
-  
+
   celery:
     image: tem-api:latest
     networks:
@@ -66,7 +65,7 @@ services:
       - CELERY_BROKER_URL=redis://redis
     volumes:
       - ./src:/opt/tem-api
-    command: celery worker -A djreact -B -l info
+    command: ["celery", "-A", "djreact", "worker", "-B", "-l", "info"]
     depends_on:
       - tem-api
       - redis
