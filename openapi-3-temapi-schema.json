@@ -6,7 +6,7 @@
     "description": "API for Time and Equipment Tracking"
   },
   "paths": {
-    "/api/dis/": {
+    "/api/discipline/": {
       "get": {
         "operationId": "listDisciplines",
         "description": "",
@@ -97,7 +97,7 @@
         }
       }
     },
-    "/api/dis/{id}/": {
+    "/api/discipline/{id}/": {
       "get": {
         "operationId": "retrieveDiscipline",
         "description": "",
@@ -275,7 +275,7 @@
         }
       }
     },
-    "/api/pos/": {
+    "/api/position/": {
       "get": {
         "operationId": "listPositions",
         "description": "",
@@ -386,7 +386,7 @@
         }
       }
     },
-    "/api/pos/{id}/": {
+    "/api/position/{id}/": {
       "get": {
         "operationId": "retrievePosition",
         "description": "",
@@ -597,7 +597,7 @@
         }
       }
     },
-    "/api/emp/": {
+    "/api/employee/": {
       "get": {
         "operationId": "listEmployees",
         "description": "",
@@ -728,7 +728,7 @@
         }
       }
     },
-    "/api/emp/{id}/": {
+    "/api/employee/{id}/": {
       "get": {
         "operationId": "retrieveEmployee",
         "description": "",
@@ -975,7 +975,7 @@
         }
       }
     },
-    "/api/cli/": {
+    "/api/client/": {
       "get": {
         "operationId": "listClients",
         "description": "",
@@ -1066,7 +1066,7 @@
         }
       }
     },
-    "/api/cli/{id}/": {
+    "/api/client/{id}/": {
       "get": {
         "operationId": "retrieveClient",
         "description": "",
@@ -1244,7 +1244,7 @@
         }
       }
     },
-    "/api/reg/": {
+    "/api/region/": {
       "get": {
         "operationId": "listRegions",
         "description": "",
@@ -1335,7 +1335,7 @@
         }
       }
     },
-    "/api/reg/{id}/": {
+    "/api/region/{id}/": {
       "get": {
         "operationId": "retrieveRegion",
         "description": "",
@@ -1513,7 +1513,7 @@
         }
       }
     },
-    "/api/sit/": {
+    "/api/site/": {
       "get": {
         "operationId": "listSites",
         "description": "",
@@ -1654,7 +1654,7 @@
         }
       }
     },
-    "/api/sit/{id}/": {
+    "/api/site/{id}/": {
       "get": {
         "operationId": "retrieveSite",
         "description": "",
@@ -1919,7 +1919,7 @@
         }
       }
     },
-    "/api/eqp/": {
+    "/api/equipment/": {
       "get": {
         "operationId": "listEquipments",
         "description": "",
@@ -2040,7 +2040,7 @@
         }
       }
     },
-    "/api/eqp/{id}/": {
+    "/api/equipment/{id}/": {
       "get": {
         "operationId": "retrieveEquipment",
         "description": "",
@@ -2272,7 +2272,7 @@
         }
       }
     },
-    "/api/wrk/": {
+    "/api/worklog/": {
       "get": {
         "operationId": "listWorklogs",
         "description": "",
@@ -2788,7 +2788,7 @@
         }
       }
     },
-    "/api/wrk/{id}/": {
+    "/api/worklog/{id}/": {
       "get": {
         "operationId": "retrieveWorklog",
         "description": "",
@@ -3704,7 +3704,7 @@
         }
       }
     },
-    "/api/disp/": {
+    "/api/dispute/": {
       "get": {
         "operationId": "listDisputes",
         "description": "",
@@ -4200,7 +4200,7 @@
         }
       }
     },
-    "/api/disp/{id}/": {
+    "/api/dispute/{id}/": {
       "get": {
         "operationId": "retrieveDispute",
         "description": "",
@@ -5086,7 +5086,7 @@
         }
       }
     },
-    "/api/eqpchrg/": {
+    "/api/equipcharge/": {
       "get": {
         "operationId": "listEquipmentCharges",
         "description": "",
@@ -5237,7 +5237,7 @@
         }
       }
     },
-    "/api/eqpchrg/{id}/": {
+    "/api/equipcharge/{id}/": {
       "get": {
         "operationId": "retrieveEquipmentCharge",
         "description": "",
@@ -5517,7 +5517,7 @@
         }
       }
     },
-    "/api/mnhrschrg/": {
+    "/api/manhrscharge/": {
       "get": {
         "operationId": "listManHoursCharges",
         "description": "",
@@ -5678,7 +5678,7 @@
         }
       }
     },
-    "/api/mnhrschrg/{id}/": {
+    "/api/manhrscharge/{id}/": {
       "get": {
         "operationId": "retrieveManHoursCharge",
         "description": "",
