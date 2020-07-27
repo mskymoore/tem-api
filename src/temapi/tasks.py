@@ -220,6 +220,15 @@ def do_data_update():
     pass
 
 
+@shared_task
+def synchronize_worklogs_included_employees():
+    # for each worklog in all worklogs
+    # create list of employees who have man hours charges in this worklog
+    # synchronize manytomany included_employees on worklog with this list
+
+    pass
+
+
 @worker_ready.connect
 def load_example_data(sender=None, conf=None, **kwargs):
 
