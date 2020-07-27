@@ -149,6 +149,10 @@ class RateSheet(models.Model):
 
 
 class Worklog(models.Model):
+    # TODO: Track creator, editors, and edits
+    created_by = models.ForeignKey(
+        User, related_name='created_worklogs', on_delete=models.DO_NOTHING, null=False, blank=False)
+    included_employees = models.ManyToManyField(Employee)
     summary = models.CharField(max_length=32000, null=False)
     client = models.ForeignKey(
         Client, related_name='worklogs', on_delete=models.DO_NOTHING)
@@ -163,6 +167,8 @@ class Worklog(models.Model):
 
 
 class Dispute(models.Model):
+    created_by = models.ForeignKey(
+        User, related_name='created_disputes', on_delete=models.DO_NOTHING, null=False, blank=False)
     worklog = models.ForeignKey(
         Worklog, related_name='disputes', on_delete=models.DO_NOTHING)
     summary = models.CharField(max_length=1008, null=False)
@@ -174,6 +180,8 @@ class Dispute(models.Model):
 
 
 class EquipmentCharge(models.Model):
+    created_by = models.ForeignKey(
+        User, related_name='created_equipment_charges', on_delete=models.DO_NOTHING, null=False, blank=False)
     hours = models.FloatField(null=False, default=0)
     equipment = models.ForeignKey(
         Equipment, related_name='charges', on_delete=models.DO_NOTHING)
@@ -188,6 +196,8 @@ class EquipmentCharge(models.Model):
 
 
 class ManHoursCharge(models.Model):
+    created_by = models.ForeignKey(
+        User, related_name='created_manhrs_charges', on_delete=models.DO_NOTHING, null=False, blank=False)
     hours = models.FloatField(null=False, default=0)
     employee = models.ForeignKey(
         Employee, related_name='charges', on_delete=models.DO_NOTHING)
