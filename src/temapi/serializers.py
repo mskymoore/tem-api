@@ -72,8 +72,6 @@ class EmployeeSerializer(serializers.ModelSerializer):
             'number',
             'position',
             'discipline',
-            'name',
-            'email'
         )
 
 
