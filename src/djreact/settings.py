@@ -31,6 +31,7 @@ SECRET_KEY = '+jm8bn233ye8vad#2+yck-9-#$578q18n5awqz*)37oq#v@3g!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+ADMINS = [('Sky Moore', 'mskymoore@gmail.com')]
 ALLOWED_HOSTS = ['*']
 PROTOCOL = 'https'
 HOSTNAME = 'api.rwx.dev'

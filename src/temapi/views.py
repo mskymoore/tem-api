@@ -69,14 +69,15 @@ class PositionViewSet(CreateListUpdateRetrieveViewSet):
     serializer_class = PositionSerializer
 
     def get_queryset(self):
-
         if 'parent_lookup_employee' in self.kwargs:
             employee = Employee.objects.filter(
                 id=self.kwargs['parent_lookup_employee']).first()
             if employee:
-                return {employee.position}
+                return [employee.position]
             else:
                 return Position.objects.none()
+        else:
+            return Position.objects.all()
 
 
 class EmployeeViewSet(CreateListUpdateRetrieveViewSet):

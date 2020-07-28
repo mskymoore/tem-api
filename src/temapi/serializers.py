@@ -52,12 +52,13 @@ class DisciplineSerializer(FlexFieldsModelSerializer):
 
 
 class PositionSerializer(FlexFieldsModelSerializer):
-    discipline = serializers.SlugRelatedField(
-        slug_field='name', queryset=Discipline.objects.all())
 
     class Meta:
         model = Position
         fields = ('url', 'name', 'discipline')
+        expandable_fields = {
+                'discipline': (DisciplineSerializer, {'many': False})
+        }
 
 
 class EmployeeSerializer(FlexFieldsModelSerializer):
