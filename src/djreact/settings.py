@@ -280,6 +280,8 @@ DJOSER = {
         'user': 'temapi.serializers.UserCreateSerializer',
         'token_create': 'temapi.serializers.TokenCreateSerializer',
     },
+    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_CONFIRMATION_EMAIL': True,
 }
 
 SIMPLE_JWT = {
