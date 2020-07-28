@@ -18,8 +18,6 @@ router.register(r'discipline', DisciplineViewSet, basename='discipline')
 router.register(r'position', PositionViewSet, basename='position')
 
 employee = router.register(r'employee', EmployeeViewSet)
-
-
 employee.register(
     r'position',
     PositionViewSet,
@@ -39,6 +37,12 @@ client.register(
     r'worklog',
     WorklogViewSet,
     basename='client-worklog',
+    parents_query_lookups=['client']
+)
+client.register(
+    r'ratesheet',
+    RateSheetViewSet,
+    basename='client-ratesheet',
     parents_query_lookups=['client']
 )
 

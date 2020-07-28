@@ -123,6 +123,12 @@ class RateSheetViewSet(CreateListUpdateRetrieveViewSet):
     queryset = RateSheet.objects.all()
 
     def get_queryset(self):
+
+        if 'parent_lookup_client' in self.kwargs:
+            client = Client.objects.get(id=self.kwargs['parent_lookup_client'])
+            if client:
+                return Ratesheet.objects.filter(client=client).all()
+
         if self.request.user.role == 1:
             return RateSheet.objects.all()
 
