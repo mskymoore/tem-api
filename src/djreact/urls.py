@@ -13,7 +13,7 @@ urlpatterns = [
         title="TEM API",
         description="API for Time and Equipment Tracking",
         version="0.0.1",
-        url="https://api.rwx.dev/api/"
+        url="https://api.rwx.dev/"
     ), name='openapi-schema',)
 ]
 
