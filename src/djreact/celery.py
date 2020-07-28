@@ -1,7 +1,5 @@
 import os
 from celery import Celery
-from celery.signals import celeryd_init
-
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djreact.settings')
 

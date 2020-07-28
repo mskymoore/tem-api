@@ -32,10 +32,12 @@ SECRET_KEY = '+jm8bn233ye8vad#2+yck-9-#$578q18n5awqz*)37oq#v@3g!'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 PROTOCOL = 'http'
 HOSTNAME = 'localhost'
 PORT = ':3333'
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
 
 REDIS_HOST = 'redis'
 POSTGRES_HOST = 'db'
@@ -83,7 +85,7 @@ INSTALLED_APPS = [
 
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -93,7 +95,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
-]
+)
 
 ROOT_URLCONF = 'djreact.urls'
 
@@ -182,24 +184,56 @@ STATICFILES_DIR = [
 # Celery config
 
 CELERY_BROKER_URL = 'redis://%s:6379/0' % REDIS_HOST
+CELERY_RESULT_BACKEND = 'redis://%s:6379/0' % REDIS_HOST
+CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'US/Eastern'
+CELERY_TIMEZONE = 'US/Central'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-# CELERY_BEAT_SCHEDULE = {
-#     'update-database': {
-#         'task': 'temapi.tasks.do_data_update',
-#         'schedule': timedelta(hours=6),
-#         # 'args': (*args)
-#     }
-# }
+CELERY_BEAT_SCHEDULE = {
+    'synchronize worklogs included employees': {
+        'task': 'temapi.tasks.synchronize_worklogs_included_employees',
+        'schedule': timedelta(minutes=5),
+        # 'args': (*args)
+    },
+    'test task': {
+        'task': 'temapi.tasks.do_data_update',
+        'schedule': timedelta(hours=6),
+        # 'args': (*args)
+    },
+}
 
 
 if DEBUG:
+
+    INSTALLED_APPS += ('debug_toolbar',)
+    MIDDLEWARE = (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        'querycount.middleware.QueryCountMiddleware',
+    ) + MIDDLEWARE  # we want Debug Middleware at the top
+
+    INTERNAL_IPS = ['127.0.0.1']
+
+    import socket
+
+    try:
+        INTERNAL_IPS.append(socket.gethostbyname(socket.gethostname())[:-1])
+    except socket.gaierror:
+        pass
+
+    QUERYCOUNT = {
+        'IGNORE_REQUEST_PATTERNS': [
+            r'^/admin/',
+            r'^/static/',
+        ]
+    }
+
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": lambda request: True
+    }
+
     REST_FRAMEWORK = {
-        # Use Django's standard `django.contrib.auth` permissions,
-        # or allow read-only access for unauthenticated users.
         'DEFAULT_AUTHENTICATION_CLASSES': [
             'rest_framework.authentication.SessionAuthentication',
             'rest_framework.authentication.TokenAuthentication',
