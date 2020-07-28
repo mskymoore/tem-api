@@ -173,8 +173,8 @@ STATICFILES_DIR = [
 
 # Celery config
 
-CELERY_BROKER_URL = 'redis://%s:6379/0' % REDIS_HOST
-CELERY_RESULT_BACKEND = 'redis://%s:6379/0' % REDIS_HOST
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:6379/0'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:6379/0'
 CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
@@ -250,6 +250,16 @@ else:
 
     }
 
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f'redis://{REDIS_HOST}:6379/1',
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 AUTH_USER_MODEL = 'temapi.User'
 

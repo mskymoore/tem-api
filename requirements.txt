@@ -9,6 +9,7 @@ django-cors-headers==3.4.0
 django-ipware==3.0.0
 djangorestframework-simplejwt==4.4.0
 django-querycount==0.7.0
+django-redis==4.12.1
 django-templated-mail==1.1.1
 django-timezone-field==4.0
 djangorestframework==3.11.0
