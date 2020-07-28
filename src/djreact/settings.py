@@ -29,12 +29,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+jm8bn233ye8vad#2+yck-9-#$578q18n5awqz*)37oq#v@3g!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-PROTOCOL = 'http'
-HOSTNAME = 'localhost'
-PORT = ':3333'
+PROTOCOL = 'https'
+HOSTNAME = 'api.rwx.dev'
+PORT = ''
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
 
@@ -116,17 +116,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'djreact.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 DATABASES = {
     'default': {
