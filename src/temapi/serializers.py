@@ -3,6 +3,7 @@ from temapi.models import Discipline, Position, Employee, Client
 from temapi.models import Region, Site, Rate, Equipment, DayRate
 from temapi.models import RateSheet, Worklog, EquipmentCharge
 from temapi.models import ManHoursCharge, Dispute, User
+from rest_flex_fields import FlexFieldsModelSerializer
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from djoser.conf import settings
 from django.contrib.auth import authenticate
@@ -44,13 +45,13 @@ class TokenCreateSerializer(serializers.Serializer):
         self.fail("invalid_credentials")
 
 
-class DisciplineSerializer(serializers.ModelSerializer):
+class DisciplineSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Discipline
         fields = ('url', 'name',)
 
 
-class PositionSerializer(serializers.ModelSerializer):
+class PositionSerializer(FlexFieldsModelSerializer):
     discipline = serializers.SlugRelatedField(
         slug_field='name', queryset=Discipline.objects.all())
 
@@ -59,7 +60,7 @@ class PositionSerializer(serializers.ModelSerializer):
         fields = ('url', 'name', 'discipline')
 
 
-class EmployeeSerializer(serializers.ModelSerializer):
+class EmployeeSerializer(FlexFieldsModelSerializer):
     position = serializers.SlugRelatedField(
         slug_field='name', queryset=Position.objects.all())
     discipline = serializers.SlugRelatedField(
@@ -75,19 +76,19 @@ class EmployeeSerializer(serializers.ModelSerializer):
         )
 
 
-class ClientSerializer(serializers.ModelSerializer):
+class ClientSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Client
         fields = ('url', 'name',)
 
 
-class RegionSerializer(serializers.ModelSerializer):
+class RegionSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Region
         fields = ('url', 'name',)
 
 
-class SiteSerializer(serializers.ModelSerializer):
+class SiteSerializer(FlexFieldsModelSerializer):
     region = serializers.SlugRelatedField(
         slug_field='name', queryset=Region.objects.all())
 
@@ -102,7 +103,7 @@ class SiteSerializer(serializers.ModelSerializer):
         )
 
 
-class RateSerializer(serializers.ModelSerializer):
+class RateSerializer(FlexFieldsModelSerializer):
     position = serializers.SlugRelatedField(
         slug_field='name', queryset=Position.objects.all())
 
@@ -118,7 +119,7 @@ class RateSerializer(serializers.ModelSerializer):
         )
 
 
-class EquipmentSerializer(serializers.ModelSerializer):
+class EquipmentSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Equipment
         fields = (
@@ -128,7 +129,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
         )
 
 
-class DayRateSerializer(serializers.ModelSerializer):
+class DayRateSerializer(FlexFieldsModelSerializer):
     equipment = serializers.HyperlinkedRelatedField(
         view_name='equipment-detail', queryset=Equipment.objects.all())
 
@@ -143,7 +144,7 @@ class DayRateSerializer(serializers.ModelSerializer):
         )
 
 
-class RateSheetSerializer(serializers.ModelSerializer):
+class RateSheetSerializer(FlexFieldsModelSerializer):
     client = serializers.SlugRelatedField(
         slug_field='name', queryset=Client.objects.all())
     region = serializers.SlugRelatedField(
@@ -163,7 +164,7 @@ class RateSheetSerializer(serializers.ModelSerializer):
         )
 
 
-class EquipmentChargeSerializer(serializers.ModelSerializer):
+class EquipmentChargeSerializer(FlexFieldsModelSerializer):
     equipment = serializers.HyperlinkedRelatedField(
         view_name='equipment-detail', queryset=Equipment.objects.all())
     worklog = serializers.HyperlinkedRelatedField(
@@ -182,7 +183,7 @@ class EquipmentChargeSerializer(serializers.ModelSerializer):
         )
 
 
-class ManHoursChargeSerializer(serializers.ModelSerializer):
+class ManHoursChargeSerializer(FlexFieldsModelSerializer):
     employee = serializers.HyperlinkedRelatedField(
         view_name='employee-detail', queryset=Employee.objects.all())
     worklog = serializers.HyperlinkedRelatedField(
@@ -207,13 +208,12 @@ class ManHoursChargeSerializer(serializers.ModelSerializer):
         )
 
 
-class WorklogSerializer(serializers.ModelSerializer):
+class WorklogSerializer(FlexFieldsModelSerializer):
     client = serializers.SlugRelatedField(
         slug_field='name', queryset=Client.objects.all())
     site = serializers.SlugRelatedField(
         slug_field='name', queryset=Site.objects.all())
-    manhours_charges = ManHoursChargeSerializer(many=True)
-    equipment_charges = EquipmentChargeSerializer(many=True)
+    summary = serializers.StringRelatedField(required=False)
 
     class Meta:
         model = Worklog
@@ -226,11 +226,17 @@ class WorklogSerializer(serializers.ModelSerializer):
             'disputed',
             'manhours_charges',
             'equipment_charges',
+            'included_employees',
             'date',
         )
+        expandable_fields = {
+            'manhours_charges': (ManHoursChargeSerializer, {'many': True}),
+            'equipment_charges': (EquipmentChargeSerializer, {'many': True}),
+            'included_employees': (EmployeeSerializer, {'many': True}),
+        }
 
 
-class DisputeSerializer(serializers.ModelSerializer):
+class DisputeSerializer(FlexFieldsModelSerializer):
     worklog = serializers.HyperlinkedRelatedField(
         view_name='worklog-detail', queryset=Worklog.objects.all()
     )

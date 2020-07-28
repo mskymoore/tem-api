@@ -262,7 +262,7 @@ def synchronize_worklogs_included_employees():
     for worklog in Worklog.objects.all():
         cur_included_employees = set()
 
-        for charge in worklog.manhours_charges.all():
+        for charge in worklog.manhours_charges.select_related('employee'):
             cur_included_employees.add(charge.employee)
 
             try:
@@ -273,8 +273,10 @@ def synchronize_worklogs_included_employees():
 
         for employee in worklog.included_employees.all():
 
-            if employee not in employees:
+            if employee not in cur_included_employees:
                 worklog.included_employees.remove(employee)
+
+    print("synchronized")
 
 
 @worker_ready.connect

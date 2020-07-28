@@ -47,6 +47,7 @@ services:
     networks:
       - dbnetwork
       - apinetwork
+      - tasknetwork
     volumes:
       - ./src:/opt/tem-api
     depends_on:

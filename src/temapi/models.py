@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from temapi.const import manager_role_id, client_role_id, employee_role_id
 
 
 class Client(models.Model):
@@ -58,9 +59,9 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
 
-    MANAGER = 1
-    CLIENT = 2
-    EMPLOYEE = 3
+    MANAGER = manager_role_id
+    CLIENT = client_role_id
+    EMPLOYEE = employee_role_id
 
     # this is how we determine templates and views to render
     ROLE_CHOICES = (
