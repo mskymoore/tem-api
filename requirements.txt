@@ -14,6 +14,7 @@ django-timezone-field==4.0
 djangorestframework==3.11.0
 django-axes==5.4.1
 djoser==2.0.3
+drf-extensions==0.6.0
 future==0.18.2
 kombu==4.6.11
 psycopg2-binary==2.8.5

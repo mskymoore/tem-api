@@ -1,6 +1,10 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.request import Request
+from rest_framework_extensions.mixins import NestedViewSetMixin
 from temapi.permissions import IsClientOfObjectOrManager, IsManager, IsEmployee
 from temapi.permissions import IsManagerOrClient
 from temapi.models import Discipline, Position, Employee, Client
@@ -14,7 +18,6 @@ from temapi.serializers import RateSheetSerializer, WorklogSerializer, DisputeSe
 from temapi.serializers import EquipmentChargeSerializer, ManHoursChargeSerializer
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.http import HttpResponse as Response
 from django.contrib import messages
 from djreact.settings import PROTOCOL, HOSTNAME, PORT
 import requests
@@ -51,10 +54,9 @@ class CreateListUpdateRetrieveViewSet(mixins.CreateModelMixin,
                                       mixins.ListModelMixin,
                                       mixins.RetrieveModelMixin,
                                       mixins.UpdateModelMixin,
+                                      NestedViewSetMixin,
                                       viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
-
-    pass
 
 
 class DisciplineViewSet(CreateListUpdateRetrieveViewSet):
@@ -65,6 +67,16 @@ class DisciplineViewSet(CreateListUpdateRetrieveViewSet):
 class PositionViewSet(CreateListUpdateRetrieveViewSet):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
+
+    def get_queryset(self):
+
+        if 'parent_lookup_employee' in self.kwargs:
+            employee = Employee.objects.filter(
+                id=self.kwargs['parent_lookup_employee']).first()
+            if employee:
+                return {employee.position}
+            else:
+                return Position.objects.none()
 
 
 class EmployeeViewSet(CreateListUpdateRetrieveViewSet):
@@ -128,6 +140,18 @@ class WorklogViewSet(CreateListUpdateRetrieveViewSet):
     serializer_class = WorklogSerializer
 
     def get_queryset(self):
+
+        if 'parent_lookup_employee' in self.kwargs:
+            employee = Employee.objects.filter(
+                id=self.kwargs['parent_lookup_employee']).first()
+            if employee:
+                return employee.worklog_set.all()
+
+            else:
+                return Worklog.objects.none()
+
+        if 'parent_lookup_client' in self.kwargs:
+            return Worklog.objects.filter(client=self.kwargs['parent_lookup_client']).all()
 
         if self.request.user.role == 1 or self.request.user.role == 3:
             return Worklog.objects.all()

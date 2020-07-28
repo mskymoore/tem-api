@@ -212,8 +212,10 @@ class WorklogSerializer(serializers.ModelSerializer):
         slug_field='name', queryset=Client.objects.all())
     site = serializers.SlugRelatedField(
         slug_field='name', queryset=Site.objects.all())
-    manhours_charges = ManHoursChargeSerializer(many=True)
-    equipment_charges = EquipmentChargeSerializer(many=True)
+    manhours_charges = ManHoursChargeSerializer(many=True, required=False)
+    equipment_charges = EquipmentChargeSerializer(many=True, required=False)
+    included_employees = EmployeeSerializer(many=True, required=False)
+    summary = serializers.StringRelatedField(required=False)
 
     class Meta:
         model = Worklog
@@ -226,6 +228,7 @@ class WorklogSerializer(serializers.ModelSerializer):
             'disputed',
             'manhours_charges',
             'equipment_charges',
+            'included_employees',
             'date',
         )
 
