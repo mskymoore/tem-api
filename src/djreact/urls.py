@@ -12,8 +12,9 @@ urlpatterns = [
     path('schema/', get_schema_view(
         title="TEM API",
         description="API for Time and Equipment Tracking",
-        version="0.0.1"
-    ), name='openapi-schema')
+        version="0.0.1",
+        url="https://api.rwx.dev/api/"
+    ), name='openapi-schema',)
 ]
 
 if DEBUG:
