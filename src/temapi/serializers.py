@@ -214,7 +214,7 @@ class WorklogSerializer(FlexFieldsModelSerializer):
         slug_field='name', queryset=Client.objects.all())
     site = serializers.SlugRelatedField(
         slug_field='name', queryset=Site.objects.all())
-    summary = serializers.StringRelatedField(required=False)
+    summary = serializers.StringRelatedField()
 
     class Meta:
         model = Worklog
