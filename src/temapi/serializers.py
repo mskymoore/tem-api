@@ -70,6 +70,7 @@ class EmployeeSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Employee
         fields = (
+            'id',
             'url',
             'number',
             'position',
