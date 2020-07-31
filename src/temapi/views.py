@@ -152,23 +152,23 @@ class WorklogViewSet(CreateListUpdateRetrieveViewSet):
             employee = Employee.objects.filter(
                 id=self.kwargs['parent_lookup_employee']).first()
             if employee:
-                return employee.worklog_set.all()
+                return employee.worklog_set.order_by('-date')
 
             else:
                 return Worklog.objects.none()
 
         if 'parent_lookup_client' in self.kwargs:
-            return Worklog.objects.filter(client=self.kwargs['parent_lookup_client']).all()
+            return Worklog.objects.filter(client=self.kwargs['parent_lookup_client']).order_by('-date')
 
         if self.request.user.role == 1 or self.request.user.role == 3:
-            return Worklog.objects.all()
+            return Worklog.objects.order_by('-date')
 
         elif self.request.user.role == 2:
 
             if self.request.user.client is None:
                 return Worklog.objects.none()
 
-            return Worklog.objects.filter(client=self.request.user.client).all()
+            return Worklog.objects.filter(client=self.request.user.client).order_by('-date')
 
         else:
 
