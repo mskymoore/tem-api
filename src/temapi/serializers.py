@@ -57,7 +57,7 @@ class PositionSerializer(FlexFieldsModelSerializer):
         model = Position
         fields = ('url', 'name', 'discipline')
         expandable_fields = {
-                'discipline': (DisciplineSerializer, {'many': False})
+            'discipline': (DisciplineSerializer, {'many': False})
         }
 
 
@@ -220,6 +220,7 @@ class WorklogSerializer(FlexFieldsModelSerializer):
         model = Worklog
         fields = (
             'url',
+            'created_by',
             'summary',
             'client',
             'site',
@@ -231,6 +232,7 @@ class WorklogSerializer(FlexFieldsModelSerializer):
             'date',
         )
         expandable_fields = {
+            'created_by': (UserSerializer),
             'manhours_charges': (ManHoursChargeSerializer, {'many': True}),
             'equipment_charges': (EquipmentChargeSerializer, {'many': True}),
             'included_employees': (EmployeeSerializer, {'many': True}),
