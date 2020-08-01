@@ -175,6 +175,7 @@ class EquipmentChargeSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = EquipmentCharge
         fields = (
+            'created_by',
             'id',
             'hours',
             'equipment',
@@ -191,6 +192,7 @@ class ManHoursChargeSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = ManHoursCharge
         fields = (
+            'created_by',
             'id',
             'hours',
             'employee',
@@ -199,6 +201,7 @@ class ManHoursChargeSerializer(FlexFieldsModelSerializer):
             'date',
         )
         expandable_fields = {
+            'created_by': (UserSerializer),
             'employee': (EmployeeSerializer),
         }
 
