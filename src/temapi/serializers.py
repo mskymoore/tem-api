@@ -219,6 +219,7 @@ class WorklogSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Worklog
         fields = (
+            'id',
             'url',
             'created_by',
             'summary',
