@@ -21,7 +21,7 @@ docker exec -u 0 -it container_name python manage.py shell
 >> load_example_data()
 ```
 
-#### then create superuser:
+#### then create superuser if additional desired:
 
 ```
 docker exec -u 0 -it localhost python manage.py createsuperuser
