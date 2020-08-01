@@ -185,9 +185,6 @@ class EquipmentChargeSerializer(FlexFieldsModelSerializer):
 
 
 class ManHoursChargeSerializer(FlexFieldsModelSerializer):
-    dispute = serializers.HyperlinkedRelatedField(
-        view_name='dispute-detail', queryset=Dispute.objects.all()
-    )
     position = serializers.SlugRelatedField(
         slug_field='name', queryset=Position.objects.all())
 
@@ -199,7 +196,6 @@ class ManHoursChargeSerializer(FlexFieldsModelSerializer):
             'employee',
             'position',
             'worklog',
-            'dispute',
             'date',
         )
         expandable_fields = {
