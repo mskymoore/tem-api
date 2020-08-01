@@ -72,7 +72,6 @@ class EmployeeSerializer(FlexFieldsModelSerializer):
         fields = (
             'id',
             'url',
-            'number',
             'position',
             'discipline',
         )
@@ -125,9 +124,9 @@ class EquipmentSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = Equipment
         fields = (
+            'id',
             'url',
             'name',
-            'number',
         )
 
 
