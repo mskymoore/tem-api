@@ -185,9 +185,6 @@ class EquipmentChargeSerializer(FlexFieldsModelSerializer):
 
 
 class ManHoursChargeSerializer(FlexFieldsModelSerializer):
-    # worklog = serializers.HyperlinkedRelatedField(
-    #     view_name='worklog-detail', queryset=Worklog.objects.all()
-    # )
     dispute = serializers.HyperlinkedRelatedField(
         view_name='dispute-detail', queryset=Dispute.objects.all()
     )
@@ -206,7 +203,6 @@ class ManHoursChargeSerializer(FlexFieldsModelSerializer):
             'date',
         )
         expandable_fields = {
-            'worklog': (WorklogSerializer),
             'employee': (EmployeeSerializer),
         }
 
