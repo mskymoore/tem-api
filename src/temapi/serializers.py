@@ -166,12 +166,6 @@ class RateSheetSerializer(FlexFieldsModelSerializer):
 
 
 class EquipmentChargeSerializer(FlexFieldsModelSerializer):
-    equipment = serializers.HyperlinkedRelatedField(
-        view_name='equipment-detail', queryset=Equipment.objects.all())
-    worklog = serializers.HyperlinkedRelatedField(
-        view_name='worklog-detail', queryset=Worklog.objects.all()
-    )
-
     class Meta:
         model = EquipmentCharge
         fields = (
@@ -183,6 +177,10 @@ class EquipmentChargeSerializer(FlexFieldsModelSerializer):
             'dispute',
             'date',
         )
+        expandable_fields = {
+            'created_by': (UserSerializer),
+            'equipment': (EquipmentSerializer)
+        }
 
 
 class ManHoursChargeSerializer(FlexFieldsModelSerializer):
